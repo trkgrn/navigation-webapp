@@ -1,0 +1,26 @@
+<main class="form-signin w-100 m-auto text-center">
+
+
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+    <div class="alert alert-warning" *ngIf='invalidLogin'>{{errorMessage}}</div>
+    <div class="alert alert-success" *ngIf='loginSuccess'>{{successMessage}}</div>
+    <h1 class="h3 mb-3 fw-normal">Giriş yap</h1>
+
+    <div class="form-floating form-label-group">
+      <input type="username" #username="ngModel" [(ngModel)]="model.username" class="form-control" id="floatingUsername"
+             name="floatingUsername" placeholder="name@example.com">
+      <label for="floatingUsername">Kullanıcı Adı</label>
+    </div>
+    <div class="form-floating form-label-group">
+      <input type="password" #password="ngModel" [(ngModel)]="model.password" class="form-control" id="floatingPassword"
+             name="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Şifre</label>
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Giriş yap</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+  </form>
+
+</main>
+
+
