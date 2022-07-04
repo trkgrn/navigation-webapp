@@ -1,10 +1,12 @@
 package com.example.navigation.entity.concretes;
 
 import lombok.*;
-import org.hibernate.Hibernate;
+
 
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Getter
@@ -21,12 +23,18 @@ public class User {
     private int id;
 
     @Column(name = "username")
+    @NotNull
+    @NotEmpty
     private String username;
 
     @Column(name = "password")
+    @NotNull
+    @NotEmpty
     private String password;
 
     @Column(name = "role")
+    @NotNull
+    @NotEmpty
     private String role;
 
 }

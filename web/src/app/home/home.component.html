@@ -1,1 +1,25 @@
-<p>Home sayfasına yönlendirildi!</p>
+
+<body>
+<div class="container">
+  <button type="button" class="btn btn-primary" (click)="getAllUser()">Kullanıcıları Listele</button>
+</div>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">#ID</th>
+    <th scope="col">Username</th>
+    <th scope="col">Password</th>
+    <th scope="col">Role</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of userList">
+    <th scope="row">{{user.id}}</th>
+    <td>{{user.username}}</td>
+    <td>{{user.password}}</td>
+    <td>{{user.role}}</td>
+  </tr>
+  </tbody>
+</table>
+</body>
