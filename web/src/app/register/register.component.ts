@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(form:NgForm){
+    this.model.role = 'USER'
     console.log(this.model)
     this.accountService.register(this.model).subscribe(data=>{
       this.router.navigate(["/home"]);

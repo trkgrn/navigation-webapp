@@ -8,6 +8,7 @@ import com.example.navigation.core.utilities.results.SuccessResult;
 import com.example.navigation.dataAccess.abstracts.UserRepository;
 import com.example.navigation.entity.concretes.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,10 @@ public class UserManager implements UserService {
 
     @Override
     public Result add(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         this.userRepository.save(user);
         return new SuccessResult("Kullanıcı eklendi!");
     }
+
+
 }

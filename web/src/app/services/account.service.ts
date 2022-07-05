@@ -26,11 +26,10 @@ export class AccountService {
   }
 
   register(user:User){
-    let headers: HttpHeaders;
-    headers = new HttpHeaders({
-      Authorization: 'Basic ' + btoa('admin:123')
-    });
-    return this.http.post<User>('http://localhost:8080/add',user)
+    let username = 'user'
+    let password = '321'
+    const headers = new HttpHeaders({ Authorization: 'Basic ' + btoa(username + ':' + password) });
+    return  this.http.post<User>("http://localhost:8080/register",user,{headers});
 
   }
 

@@ -35,9 +35,10 @@ public class WebController {
         return this.userService.getAllByIdNotNull().getData();
      }
 
-    @PostMapping(value = "/add")
+
+     @PostMapping(value = "/register")
     public ResponseEntity<?> add(@Valid @RequestBody User user){
-        return ResponseEntity.ok(this.userService.add(user));
+        return  ResponseEntity.ok(this.userService.add(user));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

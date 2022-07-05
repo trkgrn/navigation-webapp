@@ -3,6 +3,7 @@ package com.example.navigation.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,38 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    private static final String[] AUTH_WHITELIST = {
-            // -- Swagger UI v2
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            // -- Swagger UI v3 (OpenAPI)
-            "/v3/api-docs/**",
-            "/swagger-ui/**"
-            // other public endpoints of your API may be appended to this array
-    };
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
 
-        http.authorizeRequests()
-                .antMatchers("/")
-                .permitAll()
-                .antMatchers("/add")
-                .permitAll()
-                .antMatchers(this.AUTH_WHITELIST)
-                .permitAll()
-                .antMatchers("/home")
-                .hasAuthority("USER")
-                .antMatchers("/admin")
-                .hasAuthority("ADMIN")
+        http.csrf().disable().authorizeRequests()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
                 .and()
                 .httpBasic();
     }
