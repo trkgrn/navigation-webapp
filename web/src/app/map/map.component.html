@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" >Rota Oluştur</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" (click)="test()">Rota Bul</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="showDialog()" >Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+<p-dialog position="top" [resizable]="true" [(visible)]="display" [autoZIndex]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+
+  <app-address (msgEvent)="receiveValue($event)"></app-address>
+
+
+</p-dialog>
+
+
+  <agm-map [latitude]="latitude" [longitude]="longitude"
+           (mapReady)="onMapReady($event)"
+           [disableDoubleClickZoom]="true"
+           (mapDblClick)="doubleClick($event)"
+  >
+
+    <div *ngIf="!isClick">
+      <agm-marker [latitude]="latitude" [longitude]="longitude" [iconUrl]="icon"></agm-marker>
+      <agm-marker  *ngFor="let waypoint of locations" [latitude]="waypoint.lat" [longitude]="waypoint.lng"></agm-marker>
+    </div>
+
+
+    <agm-direction *ngIf="isClick"
+      [origin]="origin"
+      [destination]="destination"
+      [waypoints]="waypoints"
+      [renderOptions]="renderOptions"
+      (onResponse)="onResponse($event)"
+    >
+    </agm-direction>
+  </agm-map>
+
+
+

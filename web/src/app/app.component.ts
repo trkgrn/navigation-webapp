@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AccountService} from "./services/account.service";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'web';
+  constructor(private accountService:AccountService){}
+
+
+  isLoggedIn()
+  {
+    return this.accountService.isLoggedIn();
+  }
+  logOut()
+  {
+    this.accountService.logOut();
+  }
 }
