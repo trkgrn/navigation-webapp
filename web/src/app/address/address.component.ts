@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {SelectItem} from "primeng/api";
 import {MapComponent} from "../map/map.component";
+import {AddressService} from "../services/address.service";
+import {data} from "autoprefixer";
 
 
 @Component({
@@ -12,7 +14,10 @@ export class AddressComponent implements OnInit {
   adres: Array<Adres> = [];
   clonedAdres: { [s: string]: Adres } = {};
 
-  constructor() {
+
+  ngOnInit(): void {
+  }
+  constructor(private addressService:AddressService) {
   }
 
   isEmpty()
@@ -32,59 +37,74 @@ export class AddressComponent implements OnInit {
     return false
   }
 
-  ngOnInit(): void {
-  }
+
 
   @Input() waypoints: Array<any> = [];
   @Output() msgEvent = new EventEmitter<Array<any>>();
 
-  newRoute(){
-    console.log(this.adres)
+  async newRoute(){
 
     for (let i = 0; i < this.adres.length ; i++) {
       const obj = {location: this.adres[i].mahalle+' MAH '+ this.adres[i].sokak +' SK. No:'
-          + this.adres[i].binano +
+          + this.adres[i].binaNo +
        ' ' + this.adres[i].ilce + '/' +this.adres[i].sehir}
       this.waypoints.push(obj)
     }
     this.msgEvent.emit(this.waypoints)
 
-    console.log(this.waypoints)
+    const route:any = await this.addressService.addRoute().toPromise();
+    this.adres.map(item => {
+      item.route = {
+        routeId: route.routeId
+      }
+    })
+
+  const addressList = await this.addressService.addAddressList(this.adres).toPromise()
+
   }
 
   onRowEditInit(adres: Adres) {
-    this.clonedAdres[adres.no] = { ...adres };
+    this.clonedAdres[adres.addressId] = { ...adres };
+    console.log(localStorage.getItem("username"))
+    console.log(localStorage.getItem("userId"))
   }
 
   onRowEditSave(car: Adres) {
-    delete this.clonedAdres[car.no];
+    delete this.clonedAdres[car.addressId];
   }
 
   onRowEditCancel(adres: Adres, index: number) {
-    this.adres[index] = this.clonedAdres[adres.no];
-    delete this.clonedAdres[adres.no];
+    this.adres[index] = this.clonedAdres[adres.addressId];
+    delete this.clonedAdres[adres.addressId];
   }
 
   onRowDelete(address: Adres, index:number){
     this.adres.splice(index,1)
-    delete this.clonedAdres[address.no]
+    delete this.clonedAdres[address.addressId]
   }
 
   newRow():Adres{
     for (let i = 0; i < this.adres.length; i++) {
-      this.adres[i].no = i+1;
+      this.adres[i].addressId = i+1;
     }
-    return {no:this.adres.length+1, sehir: "", ilce: "", mahalle: "", sokak: "", binano:"", daireno:"" };
+    return {addressId:this.adres.length+1, sehir: "", ilce: "", mahalle: "", sokak: "", binaNo:"", daireNo:"" };
   }
 }
 
 export interface Adres {
-  no: number;
+  addressId: number;
   sehir: string;
   ilce: string;
   mahalle: string;
   sokak: string;
-  binano: string;
-  daireno:string;
+  binaNo: string;
+  daireNo:string;
+  route?:any
 
+}
+
+export interface Route{
+  routeId:number;
+  routeDate:any;
+  user:any;
 }

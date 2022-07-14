@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit {
 
   userList:any
   ngOnInit(): void {
+    this.userProfile()
   }
 
   getAllUser(){
@@ -19,6 +20,20 @@ export class HomeComponent implements OnInit {
     temp.subscribe(data=>this.userList = data)
   }
 
+
+  tempUser: any
+  userProfile(){
+    let name = localStorage.getItem("isLogged")
+    let temp = this.accountService.getUser(name!)
+    temp.subscribe(data=> {
+      if(data!=undefined){
+        this.tempUser = data
+         localStorage.setItem("userId",this.tempUser.id)
+         localStorage.setItem("username",this.tempUser.username)
+      }
+    })
+
+  }
 
 
 }

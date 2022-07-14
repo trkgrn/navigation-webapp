@@ -1,11 +1,13 @@
 package com.example.navigation.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Entity
@@ -15,12 +17,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user", schema = "public")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","userList"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(name = "username")
     @NotNull
@@ -36,5 +39,8 @@ public class User {
     @NotNull
     @NotEmpty
     private String role;
+
+    @OneToMany(mappedBy = "user",targetEntity = Route.class)
+    private List<User> userList;
 
 }

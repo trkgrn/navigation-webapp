@@ -25,11 +25,12 @@ export class LoginComponent implements OnInit {
 
   }
 
+
+
   login(form:NgForm)
   {
     console.log(this.model)
     this.accountService.login(this.model).subscribe(data=>{
-      this.message = data;
       this.router.navigate(["/home"])
     },error => alert("Giriş başarısız!"));
   }

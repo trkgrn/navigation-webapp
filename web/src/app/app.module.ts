@@ -25,6 +25,7 @@ import {RippleModule} from "primeng/ripple";
 import { AddressComponent } from './address/address.component';
 import {DropdownModule} from "primeng/dropdown";
 import {AddRowDirective} from "./address/add-row.directive";
+import { TestComponent } from './test/test.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import {AddRowDirective} from "./address/add-row.directive";
     RegisterComponent,
     MapComponent,
     AddressComponent,
-    AddRowDirective
+    AddRowDirective,
+    TestComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,7 @@ import {AddRowDirective} from "./address/add-row.directive";
     FormsModule,
     HttpClientModule,
     AgmCoreModule.forRoot({
-      apiKey: 'API-KEY'
+      apiKey: 'AIzaSyCsIa9zfb4YCEUjH4zwXZImftMgqpnrCzU'
     }),
     AgmDirectionModule,
     DialogModule,

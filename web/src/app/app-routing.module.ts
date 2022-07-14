@@ -6,14 +6,16 @@ import {RegisterComponent} from "./register/register.component";
 import {MapComponent} from "./map/map.component";
 import { LoginGuard } from './login/login.guard';
 import {AddressComponent} from "./address/address.component";
+import {TestComponent} from "./test/test.component";
 
 const routes: Routes = [
   {path:"home",component:HomeComponent,canActivate:[LoginGuard]},
   {path:"",redirectTo:"login",pathMatch:"full"},
   {path:"login",component:LoginComponent},
   {path:"register",component:RegisterComponent},
-  {path:"google-map",component:MapComponent},
-  {path:"test",component:AddressComponent}
+  {path:"google-map",component:MapComponent,canActivate:[LoginGuard]},
+  {path:"add-address",component:AddressComponent,canActivate:[LoginGuard]},
+  {path:"test",component:TestComponent,canActivate:[LoginGuard]}
 ];
 
 @NgModule({

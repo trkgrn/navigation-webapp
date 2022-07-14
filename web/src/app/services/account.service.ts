@@ -37,6 +37,11 @@ export class AccountService {
 
   }
 
+  getUser(name:string){
+    const headers  = this.header
+    return  this.http.get("http://localhost:8080/getUser?username="+name,{headers});
+  }
+
   getAllUser() {
     const headers = this.header
     return  this.http.get("http://localhost:8080/getAllUser",{headers});
@@ -53,6 +58,8 @@ export class AccountService {
   logOut()
   {
     localStorage.removeItem("isLogged");
+    localStorage.removeItem("userId")
+    localStorage.removeItem("username")
     this.loggedIn = false;
     this.router.navigate(["/login"]);
 

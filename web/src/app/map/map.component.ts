@@ -2,6 +2,7 @@ import {GoogleMap, LatLng, Polyline, PolylineOptions} from '@agm/core/services/g
 import {Component, OnInit} from '@angular/core';
 import {} from 'googlemaps'
 import {MapService} from "../services/map.service";
+import {AddressService} from "../services/address.service";
 
 
 declare var google: any;
@@ -10,7 +11,7 @@ declare var google: any;
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css','./map.component.scss']
 })
 export class MapComponent implements OnInit {
   public title = 'playground';
@@ -25,27 +26,23 @@ export class MapComponent implements OnInit {
     scaledSize: {width: 50, height: 100}
   };
 
-  public origin: any = 'Ayazağa';
-  public destination: any = 'Maslak';
+  public origin: any;
+  public destination: any;
   isClick: boolean = false;
 
-  constructor(private mapService: MapService) {
+  constructor(private addressService: AddressService) {
   }
 
   ngOnInit(): void {
     this.setCurrentLocation()
+    this.getAllRoute()
   }
 
-  display: boolean = false;
 
-  showDialog() {
-    this.display = true;
-    this.isClick = false;
-  }
 
   receiveValue($event:any):void{
     this.waypoints = $event;
-    this.isClick = true
+   // this.isClick = true
     console.log(this.waypoints)
   }
 
@@ -62,21 +59,68 @@ export class MapComponent implements OnInit {
   }
 
 
-  doubleClick(event: any) {
-    console.log(event)
+  // doubleClick(event: any) {
+  //   console.log(event)
+  //
+  //   const obj = {location: {lat: event.coords.lat, lng: event.coords.lng}}
+  //   const obj2 = {lat: event.coords.lat, lng: event.coords.lng}
+  //
+  //   this.waypoints.push(obj)
+  //   this.locations.push(obj2)
+  //
+  //   console.log(this.waypoints)
+  // }
 
-    const obj = {location: {lat: event.coords.lat, lng: event.coords.lng}}
-    const obj2 = {lat: event.coords.lat, lng: event.coords.lng}
+  rbClick:boolean = false;
+  display: boolean = false;
+  displayMap: boolean = false;
+  displayRouteTable:boolean = true;
 
-    this.waypoints.push(obj)
-    this.locations.push(obj2)
-
-    console.log(this.waypoints)
+  rbActive() {
+    this.rbClick = true;
   }
 
-  test() {
-    this.isClick = true;
+  showRoutes(){
+    this.displayRouteTable = true
+    this.displayMap = false
+    this.display = false
+    this.isClick = false
+    this.rbClick = false
   }
+
+  showDialog() {
+    this.display = true;
+    this.isClick = false;
+  }
+
+  showMap(){
+    this.displayMap = true;
+  }
+
+  routeList:any
+  getAllRoute(){
+    let temp =  this.addressService.getAllRoute()
+    temp.subscribe(data=>{this.routeList = data;
+      console.log(this.routeList)})
+  }
+
+  calculateAddressTotal(routeId:number) {
+    let total = 0;
+
+    if (this.routeList) {
+      for (let route of this.routeList) {
+        if (route.route.routeId === routeId) {
+          total++;
+        }
+      }
+    }
+
+    return total;
+  }
+
+
+
+
 
   // Hide origin polylines
   public renderOptions = {suppressPolylines: true};

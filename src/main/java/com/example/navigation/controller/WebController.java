@@ -1,7 +1,10 @@
 package com.example.navigation.controller;
 
+import com.example.navigation.business.abstracts.AddressService;
 import com.example.navigation.business.abstracts.UserService;
+import com.example.navigation.core.utilities.results.DataResult;
 import com.example.navigation.core.utilities.results.ErrorDataResult;
+import com.example.navigation.entity.concretes.Address;
 import com.example.navigation.entity.concretes.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,11 @@ public class WebController {
         return "Dogrulama başarılı";
      }
 
+    @GetMapping("/getUser")
+    public  User getUser(@RequestParam   String username){
+        return this.userService.findByUserName(username).getData();
+    }
+
      @GetMapping("/getAllUser")
     public List<User> getAllUser(){
         return this.userService.getAllByIdNotNull().getData();
@@ -50,6 +58,8 @@ public class WebController {
         }
         return new ErrorDataResult<Object>(validationErrors,"Doğrulama hataları");
     }
+
+
 
 
 }

@@ -1,4 +1,4 @@
-<p-table #dt [value]="adres" dataKey="no" editMode="row">
+<p-table #dt [value]="adres" dataKey="addressId" editMode="row">
   <ng-template pTemplate="header">
     <tr >
       <th>No</th>
@@ -16,7 +16,7 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="output">
-            {{rowData.no}}
+            {{rowData.addressId}}
           </ng-template>
         </p-cellEditor>
       </td>
@@ -63,20 +63,20 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <input pInputText type="text" [(ngModel)]="rowData.binano">
+            <input pInputText type="text" [(ngModel)]="rowData.binaNo">
           </ng-template>
           <ng-template pTemplate="output">
-            {{rowData.binano}}
+            {{rowData.binaNo}}
           </ng-template>
         </p-cellEditor>
       </td>
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <input pInputText type="text" [(ngModel)]="rowData.daireno">
+            <input pInputText type="text" [(ngModel)]="rowData.daireNo">
           </ng-template>
           <ng-template pTemplate="output">
-            {{rowData.daireno}}
+            {{rowData.daireNo}}
           </ng-template>
         </p-cellEditor>
       </td>

@@ -1,0 +1,92 @@
+
+<body>
+<div class="container">
+  <button type="button" class="btn btn-primary" (click)="getAllUser()">Rotaları Listele</button>
+</div>
+
+<div *ngIf="false">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#ID</th>
+      <th scope="col">Şehir</th>
+      <th scope="col">İlçe</th>
+      <th scope="col">Mahalle</th>
+      <th scope="col">Sokak</th>
+      <th scope="col">Bina No</th>
+      <th scope="col">Daire No</th>
+      <th scope="col">#Rota ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let route of routeList">
+      <th scope="row">{{route.addressId}}</th>
+      <td>{{route.sehir}}</td>
+      <td>{{route.ilce}}</td>
+      <td>{{route.mahalle}}</td>
+      <td>{{route.sokak}}</td>
+      <td>{{route.binaNo}}</td>
+      <td>{{route.daireNo}}</td>
+      <td>{{route.route.routeId}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<div *ngIf="true" class="card">
+  <p-table [value]="routeList" sortField="route.routeId" sortMode="single" dataKey="route.routeId" rowGroupMode="subheader" groupRowsBy="route.routeId" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>#ID</th>
+        <th>Şehir</th>
+        <th>İlçe</th>
+        <th>Mahalle</th>
+        <th>Sokak</th>
+        <th>Bina No</th>
+        <th>Daire No</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="groupheader" let-route let-rowIndex="rowIndex" let-expanded="expanded">
+      <tr>
+        <td colspan="5">
+          <button type="button" pButton pRipple [pRowToggler]="route" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          <span class="font-bold ml-2">{{route.route.routeDate}}</span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="groupfooter" let-route>
+      <tr class="p-rowgroup-footer">
+        <td colspan="4" style="text-align: right">Toplam Adres</td>
+        <td>{{calculateAddressTotal(route.route.routeId)}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-route>
+      <tr>
+        <td>
+          {{route.addressId}}
+        </td>
+        <td>
+          {{route.sehir}}
+        </td>
+        <td>
+          {{route.ilce}}
+        </td>
+        <td>
+          {{route.mahalle}}
+        </td>
+        <td>
+          {{route.sokak}}
+        </td>
+        <td>
+          {{route.binaNo}}
+        </td>
+        <td>
+          {{route.daireNo}}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+</body>

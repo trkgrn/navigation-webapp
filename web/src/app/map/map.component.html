@@ -7,53 +7,106 @@
       <a class="navbar-brand" >Rota Oluştur</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" (click)="test()">Rota Bul</a>
+          <a class="nav-link active" aria-current="page" (click)="rbActive()">Rota Ekle</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="showDialog()" >Link</a>
+          <a class="nav-link active" (click)="showRoutes()" >Geçmiş Rotalarım</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
+          <a class="nav-link active" (click)="showMap()" >Harita Göster</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>
 
+<div *ngIf="displayRouteTable">
 
-<p-dialog position="top" [resizable]="true" [(visible)]="display" [autoZIndex]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+  <div class="card">
+    <p-table [value]="routeList" sortField="route.routeId" sortMode="single" dataKey="route.routeId" rowGroupMode="subheader" groupRowsBy="route.routeId" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#ID</th>
+          <th>Şehir</th>
+          <th>İlçe</th>
+          <th>Mahalle</th>
+          <th>Sokak</th>
+          <th>Bina No</th>
+          <th>Daire No</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-route let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td colspan="5">
+            <button type="button" pButton pRipple [pRowToggler]="route" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            <span class="font-bold ml-2">{{route.route.routeDate}}</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupfooter" let-route>
+        <tr class="p-rowgroup-footer">
+          <td colspan="4" style="text-align: right">Toplam Adres</td>
+          <td>{{calculateAddressTotal(route.route.routeId)}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-route>
+        <tr>
+          <td>
+            {{route.addressId}}
+          </td>
+          <td>
+            {{route.sehir}}
+          </td>
+          <td>
+            {{route.ilce}}
+          </td>
+          <td>
+            {{route.mahalle}}
+          </td>
+          <td>
+            {{route.sokak}}
+          </td>
+          <td>
+            {{route.binaNo}}
+          </td>
+          <td>
+            {{route.daireNo}}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 
+</div>
+
+
+
+<div *ngIf="rbClick">
   <app-address (msgEvent)="receiveValue($event)"></app-address>
+</div>
 
 
-</p-dialog>
-
-
+<p-dialog [(visible)]="displayMap" [maximizable]="true" [style]="{width: '100%',height:'100%'}">
   <agm-map [latitude]="latitude" [longitude]="longitude"
            (mapReady)="onMapReady($event)"
            [disableDoubleClickZoom]="true"
-           (mapDblClick)="doubleClick($event)"
   >
 
-    <div *ngIf="!isClick">
+    <div>
       <agm-marker [latitude]="latitude" [longitude]="longitude" [iconUrl]="icon"></agm-marker>
-      <agm-marker  *ngFor="let waypoint of locations" [latitude]="waypoint.lat" [longitude]="waypoint.lng"></agm-marker>
+<!--      <agm-marker  *ngFor="let waypoint of locations" [latitude]="waypoint.lat" [longitude]="waypoint.lng"></agm-marker>-->
     </div>
-
-
     <agm-direction *ngIf="isClick"
-      [origin]="origin"
-      [destination]="destination"
-      [waypoints]="waypoints"
-      [renderOptions]="renderOptions"
-      (onResponse)="onResponse($event)"
+                   [origin]="origin"
+                   [destination]="destination"
+                   [waypoints]="waypoints"
+                   [renderOptions]="renderOptions"
+                   (onResponse)="onResponse($event)"
     >
     </agm-direction>
   </agm-map>
+</p-dialog>
+
 
 
 
