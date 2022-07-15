@@ -45,7 +45,7 @@ import { TestComponent } from './test/test.component';
     FormsModule,
     HttpClientModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCsIa9zfb4YCEUjH4zwXZImftMgqpnrCzU'
+      apiKey: 'API-KEY'
     }),
     AgmDirectionModule,
     DialogModule,

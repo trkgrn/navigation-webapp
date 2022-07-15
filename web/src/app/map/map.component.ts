@@ -42,7 +42,8 @@ export class MapComponent implements OnInit {
 
   receiveValue($event:any):void{
     this.waypoints = $event;
-   // this.isClick = true
+    this.isClick = true
+    this.showMap()
     console.log(this.waypoints)
   }
 
@@ -78,6 +79,7 @@ export class MapComponent implements OnInit {
 
   rbActive() {
     this.rbClick = true;
+    this.displayRouteTable = false;
   }
 
   showRoutes(){
@@ -116,6 +118,23 @@ export class MapComponent implements OnInit {
     }
 
     return total;
+  }
+
+  formatRouteDate(routeId:number) {
+    let date = '';
+
+    if (this.routeList) {
+      for (let route of this.routeList) {
+        if (route.route.routeId === routeId) {
+          let temp = new Date(route.route.routeDate)
+
+          date = temp.getUTCDate() + '-' + (temp.getUTCMonth() + 1)+ '-' + temp.getFullYear()
+        }
+
+      }
+    }
+
+    return date;
   }
 
 
