@@ -54,6 +54,7 @@ export class AddressComponent implements OnInit {
 
     const route:any = await this.addressService.addRoute().toPromise();
     this.adres.map(item => {
+      item.addressId = 0,
       item.route = {
         routeId: route.routeId
       }
@@ -65,8 +66,6 @@ export class AddressComponent implements OnInit {
 
   onRowEditInit(adres: Adres) {
     this.clonedAdres[adres.addressId] = { ...adres };
-    console.log(localStorage.getItem("username"))
-    console.log(localStorage.getItem("userId"))
   }
 
   onRowEditSave(car: Adres) {

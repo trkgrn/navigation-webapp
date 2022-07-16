@@ -1,7 +1,6 @@
 import {GoogleMap, LatLng, Polyline, PolylineOptions} from '@agm/core/services/google-maps-types';
 import {Component, OnInit} from '@angular/core';
 import {} from 'googlemaps'
-import {MapService} from "../services/map.service";
 import {AddressService} from "../services/address.service";
 
 
@@ -28,7 +27,12 @@ export class MapComponent implements OnInit {
 
   public origin: any;
   public destination: any;
-  isClick: boolean = false;
+
+  directionDisplay: boolean = false;
+  rbClick:boolean = false;
+  display: boolean = false;
+  displayMap: boolean = false;
+  displayRouteTable:boolean = true;
 
   constructor(private addressService: AddressService) {
   }
@@ -42,9 +46,9 @@ export class MapComponent implements OnInit {
 
   receiveValue($event:any):void{
     this.waypoints = $event;
-    this.isClick = true
+    this.directionDisplay = true
     this.showMap()
-    console.log(this.waypoints)
+
   }
 
   private setCurrentLocation() {
@@ -72,10 +76,7 @@ export class MapComponent implements OnInit {
   //   console.log(this.waypoints)
   // }
 
-  rbClick:boolean = false;
-  display: boolean = false;
-  displayMap: boolean = false;
-  displayRouteTable:boolean = true;
+
 
   rbActive() {
     this.rbClick = true;
@@ -86,13 +87,13 @@ export class MapComponent implements OnInit {
     this.displayRouteTable = true
     this.displayMap = false
     this.display = false
-    this.isClick = false
+    this.directionDisplay = false
     this.rbClick = false
   }
 
   showDialog() {
     this.display = true;
-    this.isClick = false;
+    this.directionDisplay = false;
   }
 
   showMap(){
@@ -103,7 +104,7 @@ export class MapComponent implements OnInit {
   getAllRoute(){
     let temp =  this.addressService.getAllRoute()
     temp.subscribe(data=>{this.routeList = data;
-      console.log(this.routeList)})
+      })
   }
 
   calculateAddressTotal(routeId:number) {
@@ -156,6 +157,7 @@ export class MapComponent implements OnInit {
   }
 
   public async onResponse(event: any) {
+
     // Default style
     const polylineOptions: PolylineOptions = {
       strokeWeight: 6,
@@ -169,6 +171,8 @@ export class MapComponent implements OnInit {
     this.polylines.forEach(polyline => polyline.setMap(this.map));
 
     const {legs} = event.routes[0];
+    const myRoute = event.routes[0];
+
 
     legs.forEach((leg: { steps: any[]; }, index: string | number) => {
 
@@ -183,8 +187,28 @@ export class MapComponent implements OnInit {
 
         this.polylines.push(stepPolyline);
         stepPolyline.setMap(this.map);
+
       });
     });
+    this.computeTotalDistance(event)
+    /////
+  }
+
+   computeTotalDistance(result: google.maps.DirectionsResult) {
+    let total = 0;
+    const myroute = result.routes[0];
+
+    if (!myroute) {
+      return;
+    }
+
+    for (let i = 0; i < myroute.legs.length; i++) {
+      total += myroute.legs[i]!.distance!.value;
+    }
+
+    total = total / 1000;
+
+     (document.getElementById("total") as HTMLElement).innerHTML = total + " km";
   }
 
 

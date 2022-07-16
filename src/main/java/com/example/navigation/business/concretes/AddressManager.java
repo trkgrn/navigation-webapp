@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Component
 public class AddressManager implements AddressService {
 
    private final AddressRepository addressRepository;

@@ -25,8 +25,6 @@ export class LoginComponent implements OnInit {
 
   }
 
-
-
   login(form:NgForm)
   {
     console.log(this.model)
@@ -34,8 +32,5 @@ export class LoginComponent implements OnInit {
       this.router.navigate(["/home"])
     },error => alert("Giriş başarısız!"));
   }
-
-
-
 
 }

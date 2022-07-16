@@ -13,7 +13,7 @@ const routes: Routes = [
   {path:"",redirectTo:"login",pathMatch:"full"},
   {path:"login",component:LoginComponent},
   {path:"register",component:RegisterComponent},
-  {path:"google-map",component:MapComponent,canActivate:[LoginGuard]},
+  {path:"google-map",component:MapComponent},
   {path:"add-address",component:AddressComponent,canActivate:[LoginGuard]},
   {path:"test",component:TestComponent,canActivate:[LoginGuard]}
 ];
