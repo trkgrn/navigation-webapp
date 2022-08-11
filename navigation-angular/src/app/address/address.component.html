@@ -1,0 +1,134 @@
+<br>
+
+<div [formGroup]="form">
+<span class="p-float-label">
+    <input id="name" type="text" formControlName="routeName" pInputText [(ngModel)]="routeName" required>
+    <label for="name">Rota Adı</label>
+</span>
+  <br><br>
+  <span class="p-float-label">
+            <p-calendar id="calendar" formControlName="routeDate" dateFormat="dd-mm-yy" (click)="test()" inputId="calendar" [(ngModel)]="selectedRouteDate" [required]="true"></p-calendar>
+            <label for="calendar">Calendar</label>
+        </span>
+  <br><br>
+  <span class="p-float-label">
+  <p-dropdown id="origins" inputId="origins" formControlName="origin" [options]="warehouses" [(ngModel)]="selectedOrigin" placeholder="Başlangıç Durağı"
+              optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
+  <label for="origins">Başlangıç Durağı</label>
+</span>
+  <br><br>
+
+  <span class="p-float-label">
+  <p-dropdown id="destinations" inputId="detinations" formControlName="destination" [options]="warehouses" [(ngModel)]="selectedDestination" placeholder="Bitiş Durağı"
+              optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
+<label for="destinations">Bitiş Durağı</label>
+</span> <br>
+</div>
+
+
+
+<p-table #dt [value]="adres" dataKey="addressId" editMode="row">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>No</th>
+      <th>Şehir</th>
+      <th>İlçe</th>
+      <th>Mahalle</th>
+      <th>Sokak</th>
+      <th>Bina No</th>
+      <th>Daire No</th>
+      <th style="width:8em"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="rowData">
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            {{rowData.addressId}}
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.addressId}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.sehir" required>
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.sehir}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.ilce" required>
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.ilce}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.mahalle">
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.mahalle}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.sokak">
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.sokak}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.binaNo">
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.binaNo}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input style="width: 75%" pInputText type="text" [(ngModel)]="rowData.daireNo">
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{rowData.daireNo}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td style="text-align:center">
+        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info"
+                style="margin-right: .5em" (click)="onRowEditInit(rowData)"></button>
+        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-trash" class="ui-button-info"
+                (click)="onRowDelete(rowData,ri)"></button>
+
+        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success"
+                style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+        <!--        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)" [disabled]="isNullofSehir()"></button>-->
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<br/>
+<button pButton type="button" icon="pi pi-plus" class="ui-button-info" [label]="'Ekle'"
+        pAddRow [table]="dt" [newRow]="newRow()" [disabled]="isNullofSehir()"></button>
+<br><br>
+<button pButton type="button" icon="pi pi-map-marker" [label]="'Rota Oluştur'" (click)="newRoute()"
+        [disabled]="isEmpty() || form.invalid"></button>
+

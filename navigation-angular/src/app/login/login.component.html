@@ -1,0 +1,28 @@
+<main class="form-signin w-100 m-auto text-center">
+
+
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+    <div class="alert alert-warning" *ngIf='invalidLogin'>{{errorMessage}}</div>
+    <div class="alert alert-success" *ngIf='loginSuccess'>{{successMessage}}</div>
+    <h2 class="text-uppercase text-center mb-5">Giriş yap</h2>
+
+    <div class="form-floating form-label-group mb-3">
+      <input type="username" #username="ngModel" [(ngModel)]="model.username" class="form-control" id="floatingUsername"
+             name="floatingUsername" placeholder="name@example.com">
+      <label for="floatingUsername">Kullanıcı Adı</label>
+    </div>
+    <div class="form-floating form-label-group mb-4">
+      <input type="password" #password="ngModel" [(ngModel)]="model.password" class="form-control" id="floatingPassword"
+             name="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Şifre</label>
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Giriş yap</button>
+  </form>
+  <p class="text-center text-muted mt-5 mb-0">Henüz kayıtlı değil misin ?
+    <a href="/register" class="fw-bold text-body"><u>Kayıt Ol</u></a>
+  </p>
+
+</main>
+
+

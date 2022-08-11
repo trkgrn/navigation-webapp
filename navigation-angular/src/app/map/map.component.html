@@ -1,0 +1,229 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" >Rota Oluştur</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link " aria-current="page" (click)="rbActive()">Rota Ekle</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " (click)="showRoutes()" >Geçmiş Rotalarım</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!--<div *ngIf="displayRouteTable">-->
+
+<!--  <div class="card">-->
+<!--    <p-table [value]="routeList" sortField="orderNo" sortMode="single"  dataKey="route.routeId" rowGroupMode="subheader" groupRowsBy="route.routeId" responsiveLayout="scroll">-->
+
+<!--      <ng-template pTemplate="header">-->
+<!--        <tr>-->
+<!--          <th >#Sıra No</th>-->
+<!--          <th>Şehir</th>-->
+<!--          <th>İlçe</th>-->
+<!--          <th>Mahalle</th>-->
+<!--          <th>Sokak</th>-->
+<!--          <th>Bina No</th>-->
+<!--          <th>Daire No</th>-->
+<!--        </tr>-->
+<!--      </ng-template>-->
+
+<!--      <ng-template pTemplate="groupheader" let-route let-rowIndex="rowIndex" let-expanded="expanded">-->
+
+<!--        <tr>-->
+<!--          <td colspan="5">-->
+<!--            <button type="button" pButton pRipple [pRowToggler]="route" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>-->
+<!--            <span class="font-bold ml-2">{{formatRouteDate(route.route.routeId)}}</span>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      </ng-template>-->
+
+<!--      <ng-template pTemplate="groupfooter" let-route>-->
+
+<!--        <tr class="p-rowgroup-footer">-->
+<!--          <td colspan="4" style="text-align: right">Toplam Adres</td>-->
+<!--          <td>{{calculateAddressTotal(route.route.routeId)}}</td>-->
+<!--        </tr>-->
+<!--      </ng-template>-->
+
+
+
+
+<!--      <ng-template pTemplate="rowexpansion" let-route>-->
+
+<!--        <tr>-->
+<!--          <td>İlk Durak</td>-->
+<!--          <td>{{route.route.origin.address.sehir}}</td>-->
+<!--          <td>{{route.route.origin.address.ilce}}</td>-->
+<!--          <td>{{route.route.origin.address.mahalle}}</td>-->
+<!--          <td>{{route.route.origin.address.sokak}}</td>-->
+<!--          <td>{{route.route.origin.address.binaNo}}</td>-->
+<!--          <td>Depo Adı:{{route.route.origin.name}}</td>-->
+<!--        </tr>-->
+
+<!--        <tr>-->
+<!--          <td>-->
+<!--            {{route.orderNo}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.sehir}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.ilce}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.mahalle}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.sokak}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.binaNo}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{route.daireNo}}-->
+<!--          </td>-->
+<!--        </tr>-->
+
+<!--        <tr>-->
+<!--          <td>Son Durak</td>-->
+<!--          <td>{{route.route.destination?.address.sehir}}</td>-->
+<!--          <td>{{route.route.destination?.address.ilce}}</td>-->
+<!--          <td>{{route.route.destination?.address.mahalle}}</td>-->
+<!--          <td>{{route.route.destination?.address.sokak}}</td>-->
+<!--          <td>{{route.route.destination?.address.binaNo}}</td>-->
+<!--          <td>Depo Adı:{{route.route.destination?.name}}</td>-->
+<!--        </tr>-->
+
+<!--      </ng-template>-->
+
+<!--    </p-table>-->
+<!--  </div>-->
+
+<!--</div>-->
+
+<div *ngIf="displayRouteTable">
+  <p-table  [value]="routeList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Rota Adı</th>
+        <th>Tarih</th>
+        <th>Toplam Mesafe</th>
+        <th>Ortalama Süre</th>
+        <th ></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-route>
+      <tr>
+        <td>{{route.name}}</td>
+        <td>{{formatRouteDate(route.routeId)}}</td>
+        <td>{{route.averageDistance/1000}} km</td>
+        <td>{{secondsToDayHourMinute(route.averageDuration)}}</td>
+        <td >
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>
+          <button pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>
+
+<p-dialog [(visible)]="displayRouteDetail">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Sıra</th>
+        <th>Şehir</th>
+        <th>İlçe</th>
+        <th>Mahalle</th>
+        <th>Sokak</th>
+        <th>Bina No</th>
+        <th>Daire No</th>
+        <th style="width: 8rem"></th>
+      </tr>
+    </thead>
+
+    <tbody class="table-group-divider">
+      <tr>
+        <td>İlk Durak</td>
+        <td>{{selectedRoute?.origin.address.sehir}}</td>
+        <td>{{selectedRoute?.origin.address.mahalle}}</td>
+        <td>{{selectedRoute?.origin.address.ilce}}</td>
+        <td>{{selectedRoute?.origin.address.sokak}}</td>
+        <td>{{selectedRoute?.origin.address.binaNo}}</td>
+        <td>Depo Adı: {{selectedRoute?.origin.name}}</td>
+      </tr>
+      <tr *ngFor="let address of addressList">
+        <td>{{address.orderNo}}</td>
+        <td>{{address.sehir}}</td>
+        <td>{{address.ilce}}</td>
+        <td>{{address.mahalle}}</td>
+        <td>{{address.sokak}}</td>
+        <td>{{address.binaNo}}</td>
+        <td>{{address.daireNo}}</td>
+      </tr>
+      <tr>
+        <td>Son Durak</td>
+        <td>{{selectedRoute?.destination?.address.sehir}}</td>
+        <td>{{selectedRoute?.destination?.address.ilce}}</td>
+        <td>{{selectedRoute?.destination?.address.mahalle}}</td>
+        <td>{{selectedRoute?.destination?.address.sokak}}</td>
+        <td>{{selectedRoute?.destination?.address.binaNo}}</td>
+        <td>Depo Adı: {{selectedRoute?.destination?.name}}</td>
+      </tr>
+
+    </tbody>
+
+  </table>
+</p-dialog>
+
+
+
+<div *ngIf="rbClick">
+  <app-address (msgEvent)="receiveValue($event)"></app-address>
+</div>
+
+
+<p-dialog [(visible)]="displayMap" [maximizable]="true" [style]="{width: '100%',height:'100%'}">
+  <div>
+    <p>Total Distance: <span id="total"></span></p>
+  </div>
+
+  <agm-map [latitude]="latitude" [longitude]="longitude"
+           (mapReady)="onMapReady($event)"
+           [disableDoubleClickZoom]="true"
+  >
+
+    <agm-direction *ngIf="directionDisplay"
+                   [origin]="originLatlng"
+                   [destination]="destinationLatlng"
+                   [waypoints]="waypoints"
+                   [renderOptions]="renderOptions"
+                   (onResponse)="onResponse($event)"
+
+    >
+
+
+    </agm-direction>
+  </agm-map>
+</p-dialog>
+
+<p-dialog [(visible)]="displayRouteMap" [maximizable]="true" [style]="{width: '100%',height:'100%'}">
+
+  <agm-map [latitude]="latitude" [longitude]="longitude"
+           (mapReady)="onMapReady2($event)"
+           [disableDoubleClickZoom]="true">
+  </agm-map>
+
+</p-dialog>
+
+<!--<pre>{{routeList | json }}</pre>-->
+
+

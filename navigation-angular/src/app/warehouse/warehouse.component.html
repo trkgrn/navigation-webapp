@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" >Depo</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link "  (click)="warehouseAddPage()">Depo Ekle</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " (click)="warehouseListPage()" >Depolar</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<main *ngIf="warehouseAddPageClick" class="form-signin w-100 m-auto text-center">
+  <form #warehouseAddForm="ngForm" (ngSubmit)="add(warehouseAddForm)">
+    <br>
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Depo Adı" #name="ngModel" [(ngModel)]="warehouse.name" class="form-control"
+             name="name" id="name" required>
+      <label for="name">Depo Adı</label>
+    </div> <br>
+
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Şehir" #name="ngModel" [(ngModel)]="model.sehir" class="form-control"
+             name="sehir" id="sehir" required>
+      <label for="name">Şehir</label>
+    </div> <br>
+
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="İlçe" #name="ngModel" [(ngModel)]="model.ilce" class="form-control"
+             name="ilce" id="ilce" required>
+      <label for="name">İlçe</label>
+    </div> <br>
+
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Mahalle" #name="ngModel" [(ngModel)]="model.mahalle" class="form-control"
+             name="mahalle" id="mahalle" required>
+      <label for="name">Mahalle</label>
+    </div> <br>
+
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Sokak" #name="ngModel" [(ngModel)]="model.sokak" class="form-control"
+             name="sokak" id="sokak" required>
+      <label for="name">Sokak</label>
+    </div> <br>
+
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Bina No" #name="ngModel" [(ngModel)]="model.binaNo" class="form-control"
+             name="binano" id="binano" required>
+      <label for="name">Bina No</label>
+    </div> <br>
+
+    <br>
+    <button type="submit" class="btn btn-primary" [disabled]="warehouseAddForm.invalid">Depo Ekle</button>
+
+  </form>
+</main>
+
+<div *ngIf="warehouseListPageClick">
+
+  <p-toast [style]="{marginTop: '80px'}"></p-toast>
+
+  <p-gmap #gmap [style]="{'width':'100%','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays"
+          (onMapClick)="handleMapClick($event)" (onOverlayClick)="handleOverlayClick($event)"></p-gmap>
+
+</div>

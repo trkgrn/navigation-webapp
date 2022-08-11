@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" >Araçlar</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link "  (click)="vehicleAddPage()">Araç Ekle</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " (click)="vehicleListPage()" >Araç İşlemleri</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main *ngIf="vehicleAddPageClick" class="form-signin w-100 m-auto text-center">
+  <form #vehicleAddForm="ngForm" (ngSubmit)="add(vehicleAddForm)">
+    <br>
+    <div class="form-label-group form-floating">
+      <input type="text" placeholder="Araç Adı" #name="ngModel" [(ngModel)]="vehicle.name" class="form-control"
+             name="name" id="name" required>
+      <label for="name">Araç Adı</label>
+    </div> <br>
+
+    <br>
+    <button type="submit" class="btn btn-primary" [disabled]="vehicleAddForm.invalid">Araç Ekle</button>
+
+  </form>
+</main>
