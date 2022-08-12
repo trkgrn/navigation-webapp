@@ -20,11 +20,21 @@
 <main *ngIf="vehicleAddPageClick" class="form-signin w-100 m-auto text-center">
   <form #vehicleAddForm="ngForm" (ngSubmit)="add(vehicleAddForm)">
     <br>
-    <div class="form-label-group form-floating">
+    <div class="form-label-group form-floating mb-4">
       <input type="text" placeholder="Araç Adı" #name="ngModel" [(ngModel)]="vehicle.name" class="form-control"
              name="name" id="name" required>
       <label for="name">Araç Adı</label>
-    </div> <br>
+    </div>
+    <div class="form-label-group form-floating mb-4">
+      <input type="text" placeholder="Araç Modeli" #model="ngModel" [(ngModel)]="vehicle.modelName" class="form-control"
+             name="model" id="model" required>
+      <label for="model">Araç Modeli</label>
+    </div>
+    <div class="form-label-group form-floating mb-4">
+      <input type="text" placeholder="Araç Plakası" #license="ngModel" [(ngModel)]="vehicle.license" class="form-control"
+             name="license" id="license" required>
+      <label for="license">Araç Plakası</label>
+    </div>
 
     <br>
     <button type="submit" class="btn btn-primary" [disabled]="vehicleAddForm.invalid">Araç Ekle</button>

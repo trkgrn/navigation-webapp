@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +23,16 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicleId;
 
-    @Column(name = "name")
+    @Column(name = "name",unique = true)
     private String name;
+
+    @Column(name = "model")
+    private String modelName;
+
+    @Column (name = "license",unique = true)
+    @NotEmpty
+    @NotNull
+    private String license;
 
     @OneToMany(
             mappedBy = "vehicle",

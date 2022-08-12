@@ -33,7 +33,7 @@ export class AddressComponent implements OnInit {
     })
   }
   test(){
-  //  console.log(this.selectedRouteDate)
+    console.log(this.selectedRouteDate)
   }
 
   isEmpty()
