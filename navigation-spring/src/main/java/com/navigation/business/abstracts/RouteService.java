@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface RouteService {
     Route add(Route route);
-//    List<RouteDto> findByUser_Id(Long id);
+    List<RouteDto> findRoutesByVehicleId(Long vehicleId);
+    List<RouteDto> findRoutesByVehicleNull();
     MapDataDto getMapDataByRouteId(Long routeId);
 }

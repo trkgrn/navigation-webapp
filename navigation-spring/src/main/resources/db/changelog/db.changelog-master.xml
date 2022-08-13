@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="db/changelog/2022/08/11-01-changelog.xml"/>
+    <include file="db/changelog/2022/08/13-01-changelog.xml"/>
     <changeSet id="role_column_creator" author="trkgrn">
         <insert tableName="role">
             <column name="name" value="Driver"></column>

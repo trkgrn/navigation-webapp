@@ -5,7 +5,7 @@ import {AddressService} from "../services/address.service";
 import {Adres} from "../address/address.component";
 import {stringify} from 'zipson';
 import {parse} from "zipson/lib";
-import {data} from "autoprefixer";
+import {DateService} from "../services/date.service";
 
 
 declare var google: any;
@@ -47,12 +47,13 @@ export class MapComponent implements OnInit {
   waypoint_order: Array<any> = [];
   coordinateList: Array<Coordinate> = [];
   routeName: any;
-  routeDate?:Date;
+  routeStartDate?: Date;
+  routeEndDate?: Date;
   selectedRoute: any;
   compressMapData: any;
 
 
-  constructor(private addressService: AddressService) {
+  constructor(private addressService: AddressService,public dateService:DateService) {
   }
 
   ngOnInit(): void {
@@ -81,25 +82,10 @@ export class MapComponent implements OnInit {
     }
   }
 
-  secondsToDayHourMinute(seconds: any) {
-    var days = Math.floor(seconds / (3600 * 24));
-    seconds -= days * 3600 * 24;
-    var hrs = Math.floor(seconds / 3600);
-    seconds -= hrs * 3600;
-    var mnts = Math.floor(seconds / 60);
-    seconds -= mnts * 60;
-    var total = days + ' gün ' + hrs + ' saat ' + mnts + ' dakika';
-
-    if (days == 0)
-      total = hrs + ' saat ' + mnts + ' dakika';
-    if (days==0 && hrs == 0)
-      total = mnts + ' dakika';
-
-    return total;
-  }
 
 
   async createRoute() {
+    this.routeEndDate = this.dateService.calculateEndDate(this.routeStartDate,this.avgDuration);
     let obj = {
       originId: this.originData.warehouseId,
       destinationId: this.destinationData.warehouseId,
@@ -107,7 +93,8 @@ export class MapComponent implements OnInit {
       averageDistance: this.avgDistance,
       averageDuration: this.avgDuration,
       mapData: this.compressMapData,
-      routeDate: this.routeDate
+      startDate: this.routeStartDate,
+      endDate: this.routeEndDate
     }
     const route: any = await this.addressService.addRoute(obj).toPromise();
     this.adres.map(item => {
@@ -140,7 +127,7 @@ export class MapComponent implements OnInit {
     this.originData = $event.origin;
     this.destinationData = $event.destination;
     this.routeName = $event.routeName;
-    this.routeDate = $event.routeDate;
+    this.routeStartDate = $event.startDate;
     this.waypointFormat()
     this.directionDisplay = true
     this.showMap()
@@ -197,13 +184,13 @@ export class MapComponent implements OnInit {
 
   addressList: Array<any> = [];
   template: Array<any> = [];
-  markers: Array<any> =[];
+  markers: Array<any> = [];
   displayRouteMap: boolean = false
   options: any;
 
   setMapOnAll(map: GoogleMap | null) {
     for (let i = 0; i < this.markers.length; i++) {
-     this.markers[i].setMap(map);
+      this.markers[i].setMap(map);
     }
   }
 
@@ -212,53 +199,57 @@ export class MapComponent implements OnInit {
     this.markers = [];
   }
 
-  tempMapData:any
-async showRouteMap(route:any){
+  tempMapData: any
+
+  async showRouteMap(route: any) {
 
     this.deleteMarkers()
 
     this.options = {
-    center: {lat: 38.5561096, lng: 33.3898941},
-    zoom: 6
-  };
+      center: {lat: 38.5561096, lng: 33.3898941},
+      zoom: 6
+    };
 
-  try {
-    let response:any = await this.addressService.getMapDataByRouteId(route.routeId).toPromise();
-  //  console.log(response)
-    route.mapData = response.mapData
-  } catch(e) {
- //   console.log("ERROOOORRR"+e);
-  }
-  this.displayRouteMap = true
+    try {
+      let response: any = await this.addressService.getMapDataByRouteId(route.routeId).toPromise();
+      //  console.log(response)
+      route.mapData = response.mapData
+    } catch (e) {
+      //   console.log("ERROOOORRR"+e);
+    }
+    this.displayRouteMap = true
     let event = parse(route.mapData)
-  //  console.log(event)
+    //  console.log(event)
 
     const {legs} = event.routes[0];
     const myRoute = event.routes[0];
 
-    let list:any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
+    let list: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
     let labelIndex = 1
 
-  let originMarker = new google.maps.Marker({
-    position: {lat: route.origin.address.coordinate.latitude, lng: route.origin.address.coordinate.longitude},
-    label: (labelIndex++)+''
-  })
-  this.markers.push(originMarker)
+    let originMarker = new google.maps.Marker({
+      position: {lat: route.origin.address.coordinate.latitude, lng: route.origin.address.coordinate.longitude},
+      label: (labelIndex++) + ''
+    })
+    this.markers.push(originMarker)
 
-    for (const next  of list) {
+    for (const next of list) {
       let marker = new google.maps.Marker({
         position: {lat: next.coordinate.latitude, lng: next.coordinate.longitude},
-        label: (labelIndex++)+''
+        label: (labelIndex++) + ''
       })
       this.markers.push(marker);
 
     }
 
-  let destinationMarker = new google.maps.Marker({
-    position: {lat: route.destination.address.coordinate.latitude, lng: route.destination.address.coordinate.longitude},
-    label: (labelIndex++)+''
-  })
-  this.markers.push(destinationMarker);
+    let destinationMarker = new google.maps.Marker({
+      position: {
+        lat: route.destination.address.coordinate.latitude,
+        lng: route.destination.address.coordinate.longitude
+      },
+      label: (labelIndex++) + ''
+    })
+    this.markers.push(destinationMarker);
 
     this.setMapOnAll(this.routeMap);
 
@@ -273,7 +264,6 @@ async showRouteMap(route:any){
     this.polylines.forEach(polyline => polyline.setMap(null!));
 
 
-
     legs.forEach((leg: { steps: any[]; }, index: string | number) => {
 
       leg.steps.forEach(step => {
@@ -283,10 +273,9 @@ async showRouteMap(route:any){
         nextSegment.forEach((next: LatLng) => stepPolyline.getPath().push(next));
 
         this.polylines.push(stepPolyline);
-       stepPolyline.setMap(this.routeMap);
+        stepPolyline.setMap(this.routeMap);
       });
     });
-
 
 
   }
@@ -323,24 +312,6 @@ async showRouteMap(route:any){
 
     return total;
   }
-
-  formatRouteDate(routeId: number) {
-    let date = '';
-
-    if (this.routeList) {
-      for (let route of this.routeList) {
-        if (route.routeId === routeId) {
-          let temp = new Date(route.routeDate)
-
-          date = ( temp.getUTCDate() + 1 ) + '-' + (temp.getUTCMonth() + 1) + '-' + temp.getFullYear()
-        }
-
-      }
-    }
-
-    return date;
-  }
-
 
   // Hide origin polylines
   public renderOptions = {suppressPolylines: true};
@@ -410,8 +381,8 @@ async showRouteMap(route:any){
       this.computeTotalDistanceAndDuration(event)
       this.pushCoordinateList(event)
       this.compressMapData = stringify(event);
-   //   console.log(JSON.stringify(event))
-   //   console.log(this.compressMapData)
+      //   console.log(JSON.stringify(event))
+      //   console.log(this.compressMapData)
       await this.createRoute()
 
     } else {
@@ -452,8 +423,6 @@ async showRouteMap(route:any){
     for (let i = 0; i < myroute.legs.length; i++) {
       totalDistance += myroute.legs[i]!.distance!.value;
       totalDuration += myroute.legs[i]!.duration!.value;
-
-
     }
     this.avgDistance = totalDistance;
     this.avgDuration = totalDuration;

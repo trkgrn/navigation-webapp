@@ -26,10 +26,16 @@ public class RouteManager implements RouteService {
         return newRoute;
     }
 
-//    @Override
-//    public List<RouteDto> findByUser_Id(Long id) {
-//        return this.routeRepository.findByUser_Id(id);
-//    }
+    @Override
+    public List<RouteDto> findRoutesByVehicleId(Long vehicleId) {
+        return this.routeRepository.findRoutesByVehicleId(vehicleId);
+    }
+
+    @Override
+    public List<RouteDto> findRoutesByVehicleNull() {
+        return this.routeRepository.findRoutesByVehicleNull();
+    }
+
 
     @Override
     public MapDataDto getMapDataByRouteId(Long routeId) {

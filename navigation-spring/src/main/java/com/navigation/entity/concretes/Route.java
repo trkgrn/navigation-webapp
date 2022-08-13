@@ -27,8 +27,11 @@ public class Route {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "route_date")
-    private Date routeDate;
+    @Column(name = "start_date")
+    private Date startDate;
+
+    @Column(name = "end_date")
+    private Date endDate;
 
     @Column(name = "avg_distance")
     private Long averageDistance;

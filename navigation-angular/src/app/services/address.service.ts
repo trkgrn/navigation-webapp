@@ -24,13 +24,11 @@ export class AddressService {
    // console.log(routeData)
     let route = {
       name: routeData.name,
-      routeDate : routeData.routeDate,
+      startDate : routeData.startDate,
+      endDate: routeData.endDate,
       averageDistance:routeData.averageDistance,
       averageDuration:routeData.averageDuration,
       mapData:routeData.mapData,
-      user:{
-        id: sessionStorage.getItem("userId")
-      },
       origin:{
         warehouseId: routeData.originId
       },

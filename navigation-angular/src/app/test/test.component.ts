@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AddressService} from "../services/address.service";
+import {VehicleService} from "../services/vehicle.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-test',
@@ -8,7 +10,7 @@ import {AddressService} from "../services/address.service";
 })
 export class TestComponent implements OnInit {
 
-  constructor(private service:AddressService) { }
+  constructor(private service:AddressService,private vehicleService:VehicleService) { }
 
   ngOnInit(): void {
   }
@@ -33,6 +35,13 @@ export class TestComponent implements OnInit {
     }
 
     return total;
+  }
+
+ async add(){
+    let startDate = "2022-08-23 07:30:00"
+    let endDate = "2022-08-25 07:30:00"
+    let list:any = await this.vehicleService.getAvailableVehicles(startDate,endDate).toPromise();
+    console.log(list)
   }
 
 

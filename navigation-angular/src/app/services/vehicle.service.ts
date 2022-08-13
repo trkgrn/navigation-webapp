@@ -20,4 +20,9 @@ export class VehicleService {
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
     return  this.http.get(this.rootURL + "getAllVehicle",{headers});
   }
+
+  getAvailableVehicles(startDate:any,endDate:any){
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return  this.http.get(this.rootURL + "getAvailableVehicles?startDate="+startDate+"&endDate="+endDate,{headers});
+  }
 }

@@ -27,7 +27,7 @@ export class AddressComponent implements OnInit {
   constructor(private addressService:AddressService,private fb:FormBuilder) {
     this.form = fb.group({
       routeName:[null , Validators.required],
-      routeDate:[null, Validators.required],
+      startDate:[null, Validators.required],
       origin:[null, Validators.required],
       destination:[null, Validators.required]
     })
@@ -66,7 +66,7 @@ export class AddressComponent implements OnInit {
        origin : this.selectedOrigin,
        destination : this.selectedDestination,
        routeName : this.routeName,
-       routeDate: this.selectedRouteDate
+       startDate: this.selectedRouteDate
      }
     this.msgEvent.emit(obj)
   }
@@ -113,7 +113,8 @@ export interface Adres {
 
 export interface Route{
   routeId:number;
-  routeDate:any;
+  startDate:any;
+  endDate:any;
   user:any;
   mapData:any;
   origin:any;

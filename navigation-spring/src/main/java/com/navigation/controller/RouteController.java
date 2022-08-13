@@ -25,14 +25,17 @@ public class RouteController {
         return this.routeService.add(route);
     }
 
-//    @GetMapping(value = "/getAllRouteByUserId")
-//    public List<RouteDto> findByUser_Id(@RequestParam Long id){
-//        return this.routeService.findByUser_Id(id);
-//    }
+    @GetMapping(value = "/getAllRouteByVehicleId")
+    List<RouteDto> findRoutesByVehicleId(@RequestParam Long vehicleId){
+        return this.routeService.findRoutesByVehicleId(vehicleId);
+    }
+    @GetMapping(value = "/getAllRouteByVehicleNull")
+    List<RouteDto> findRoutesByVehicleNull(){return this.routeService.findRoutesByVehicleNull();}
 
     @GetMapping(value = "/getMapDataByRouteId")
     public MapDataDto getMapDataByRouteId(@RequestParam Long routeId){
         return this.routeService.getMapDataByRouteId(routeId);
     }
+
 
 }

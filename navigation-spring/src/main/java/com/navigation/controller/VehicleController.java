@@ -3,8 +3,13 @@ package com.navigation.controller;
 import com.navigation.business.abstracts.VehicleService;
 import com.navigation.entity.concretes.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -14,18 +19,26 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @Autowired
-   public VehicleController(VehicleService vehicleService){
+    public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
 
     @GetMapping(value = "/getAllVehicle")
-   public List<Vehicle> findAll(){
+    public List<Vehicle> findAll() {
         return this.vehicleService.findAll();
     }
 
     @PostMapping(value = "/addVehicle")
-    public Vehicle addVehicle(@RequestBody Vehicle vehicle){
+    public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
         return this.vehicleService.addVehicle(vehicle);
     }
+
+    @GetMapping(value = "/getAvailableVehicles")
+    List<Vehicle> findAllAvailableVehicle(@RequestParam String startDate, @RequestParam String endDate) throws ParseException {
+        DateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = myFormat.parse(startDate);
+        Date end = myFormat.parse(endDate);
+        return this.vehicleService.findAllAvailableVehicle(start, end);
+    } //
 
 }

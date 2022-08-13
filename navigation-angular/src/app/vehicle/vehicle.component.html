@@ -10,7 +10,7 @@
           <a class="nav-link "  (click)="vehicleAddPage()">Araç Ekle</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " (click)="vehicleListPage()" >Araç İşlemleri</a>
+          <a class="nav-link " (click)="routeAssignmentPage()" >Rota Ataması</a>
         </li>
       </ul>
     </div>
@@ -41,3 +41,81 @@
 
   </form>
 </main>
+
+<div *ngIf="displayRouteTable">
+  <p-table  [value]="routeList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Rota Adı</th>
+        <th>Başlangıç Tarihi</th>
+        <th>Bitiş Tarihi</th>
+        <th>Toplam Mesafe</th>
+        <th>Ortalama Süre</th>
+        <th ></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-route>
+      <tr>
+        <td>{{route.name}}</td>
+        <td>{{dateService.formatRouteDate(route.routeId,routeList,'start')}}</td>
+        <td>{{dateService.formatRouteDate(route.routeId,routeList,'end')}}</td>
+        <td>{{route.averageDistance/1000}} km</td>
+        <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
+        <td >
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>
+          <button pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>
+
+<p-dialog [(visible)]="displayRouteDetail">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Sıra</th>
+      <th>Şehir</th>
+      <th>İlçe</th>
+      <th>Mahalle</th>
+      <th>Sokak</th>
+      <th>Bina No</th>
+      <th>Daire No</th>
+      <th style="width: 8rem"></th>
+    </tr>
+    </thead>
+
+    <tbody class="table-group-divider">
+    <tr>
+      <td>İlk Durak</td>
+      <td>{{selectedRoute?.origin.address.sehir}}</td>
+      <td>{{selectedRoute?.origin.address.mahalle}}</td>
+      <td>{{selectedRoute?.origin.address.ilce}}</td>
+      <td>{{selectedRoute?.origin.address.sokak}}</td>
+      <td>{{selectedRoute?.origin.address.binaNo}}</td>
+      <td>Depo Adı: {{selectedRoute?.origin.name}}</td>
+    </tr>
+    <tr *ngFor="let address of addressList">
+      <td>{{address.orderNo}}</td>
+      <td>{{address.sehir}}</td>
+      <td>{{address.ilce}}</td>
+      <td>{{address.mahalle}}</td>
+      <td>{{address.sokak}}</td>
+      <td>{{address.binaNo}}</td>
+      <td>{{address.daireNo}}</td>
+    </tr>
+    <tr>
+      <td>Son Durak</td>
+      <td>{{selectedRoute?.destination?.address.sehir}}</td>
+      <td>{{selectedRoute?.destination?.address.ilce}}</td>
+      <td>{{selectedRoute?.destination?.address.mahalle}}</td>
+      <td>{{selectedRoute?.destination?.address.sokak}}</td>
+      <td>{{selectedRoute?.destination?.address.binaNo}}</td>
+      <td>Depo Adı: {{selectedRoute?.destination?.name}}</td>
+    </tr>
+
+    </tbody>
+
+  </table>
+</p-dialog>
