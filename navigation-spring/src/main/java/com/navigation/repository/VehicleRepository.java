@@ -18,7 +18,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
                                  "(SELECT r.vehicle.vehicleId\n" +
                                      "FROM Route r " +
                                      "WHERE r.vehicle.vehicleId is not null " +
-                                     "AND r.startDate BETWEEN :startDate AND :endDate " +
-                                     "AND r.endDate BETWEEN :startDate AND :endDate)")
+                                     "AND ( (r.startDate BETWEEN :startDate AND :endDate) " +
+                                     "OR (r.endDate BETWEEN :startDate AND :endDate)) )")
     List<Vehicle> findAllAvailableVehicle(Date startDate, Date endDate);
 }

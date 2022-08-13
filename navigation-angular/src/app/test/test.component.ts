@@ -17,7 +17,7 @@ export class TestComponent implements OnInit {
 
   routeList:any
   getAllUser(){
-    let temp =  this.service.getAllRoute()
+    let temp =  this.service.getAllRoutes()
     temp.subscribe(data=>{this.routeList = data;
    // console.log(this.routeList)
     })

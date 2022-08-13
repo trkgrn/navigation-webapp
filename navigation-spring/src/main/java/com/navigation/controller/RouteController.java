@@ -32,6 +32,11 @@ public class RouteController {
     @GetMapping(value = "/getAllRouteByVehicleNull")
     List<RouteDto> findRoutesByVehicleNull(){return this.routeService.findRoutesByVehicleNull();}
 
+    @GetMapping(value = "getAllRoutes")
+    List<RouteDto> findAllRoutes(){
+        return this.routeService.findAllRoutes();
+    }
+
     @GetMapping(value = "/getMapDataByRouteId")
     public MapDataDto getMapDataByRouteId(@RequestParam Long routeId){
         return this.routeService.getMapDataByRouteId(routeId);

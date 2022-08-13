@@ -19,7 +19,7 @@ export class DateService {
           else if(type==='end')
             temp = new Date(route.endDate)
 
-          date = (temp.getUTCDate() + 1) + '-' + (temp.getUTCMonth() + 1) + '-' + temp.getFullYear()
+          date = this.dateFormatForHTML(temp)
 
         }
 
@@ -64,6 +64,12 @@ export class DateService {
   dateFormat(date:any){
     let formattedDate = date.getUTCFullYear() +'-'+ (date.getUTCMonth() + 1) +'-'+date.getUTCDate() +' '+ date.getHours()+':'+
       date.getUTCMinutes()+':'+date.getUTCSeconds();
+    return formattedDate;
+  }
+
+  dateFormatForHTML(date:any){
+    let formattedDate = date.getUTCDate() +'-'+ (date.getUTCMonth() + 1) +'-'+date.getUTCFullYear() +' '+ date.getHours()+':'+
+      date.getUTCMinutes();
     return formattedDate;
   }
 }

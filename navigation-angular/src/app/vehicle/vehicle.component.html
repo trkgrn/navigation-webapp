@@ -63,7 +63,8 @@
         <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
         <td >
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>
-          <button pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
+          <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-danger" (click)="availableVehicles(route.startDate,route.endDate)"></button>
         </td>
       </tr>
     </ng-template>

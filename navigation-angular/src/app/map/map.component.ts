@@ -293,7 +293,7 @@ export class MapComponent implements OnInit {
   routeList: Array<any> = []
 
   getAllRoute() {
-    let temp = this.addressService.getAllRouteByUserId()
+    let temp = this.addressService.getAllRoutes()
     temp.subscribe((data: any) => {
       this.routeList = data;
     })

@@ -25,6 +25,10 @@ public interface RouteRepository extends JpaRepository<Route,Long> {
             " where r.vehicle is null")
     List<RouteDto> findRoutesByVehicleNull(); // Araç atanması yapılmamış rotalar
 
+    @Query("select  new com.navigation.entity.dtos.RouteDto" +
+            "(r.routeId,r.name,r.startDate,r.endDate,r.averageDistance,r.averageDuration,r.origin,r.destination)" +
+            " FROM Route r")
+    List<RouteDto> findAllRoutes(); // Tüm rotalar
 
     @Query("select new com.navigation.entity.dtos.MapDataDto(r.mapData)" +
             " FROM Route r " +

@@ -27,6 +27,11 @@ public class RouteManager implements RouteService {
     }
 
     @Override
+    public List<RouteDto> findAllRoutes() {
+        return this.routeRepository.findAllRoutes();
+    }
+
+    @Override
     public List<RouteDto> findRoutesByVehicleId(Long vehicleId) {
         return this.routeRepository.findRoutesByVehicleId(vehicleId);
     }

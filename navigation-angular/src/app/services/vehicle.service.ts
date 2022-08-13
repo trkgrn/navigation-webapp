@@ -22,6 +22,8 @@ export class VehicleService {
   }
 
   getAvailableVehicles(startDate:any,endDate:any){
+    console.log(startDate)
+    console.log(endDate)
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
     return  this.http.get(this.rootURL + "getAvailableVehicles?startDate="+startDate+"&endDate="+endDate,{headers});
   }

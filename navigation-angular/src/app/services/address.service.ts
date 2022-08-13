@@ -54,16 +54,14 @@ export class AddressService {
     return this.http.post<Warehouse>( this.rootURL + "addWarehouse",warehouse,{headers});
   }
 
-  getAllRoute(){
-    let userId = sessionStorage.getItem("userId")
+  getAllRoutes(){
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getUserRoutes?userId="+userId,{headers});
+    return  this.http.get(this.rootURL + "getAllRoutes",{headers});
   }
 
-  getAllRouteByUserId(){
-    let userId = sessionStorage.getItem("userId")
+  getAllRouteByVehicleNull(){
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllRouteByUserId?id="+userId,{headers});
+    return  this.http.get(this.rootURL + "getAllRouteByVehicleNull",{headers});
   }
 
   getAddressByRouteId(routeId:any){
