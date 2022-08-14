@@ -80,5 +80,10 @@ export class AddressService {
     return  this.http.get(this.rootURL + "getMapDataByRouteId?routeId="+routeId,{headers});
   }
 
+  updateRoute(route:any){
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return  this.http.put(this.rootURL + "updateRoute",route,{headers});
+  }
+
 
 }

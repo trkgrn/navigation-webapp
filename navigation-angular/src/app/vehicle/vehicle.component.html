@@ -44,6 +44,11 @@
 
 <div *ngIf="displayRouteTable">
   <p-table  [value]="routeList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Görevlendirilmemiş Rotalar
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th>Rota Adı</th>
@@ -64,7 +69,7 @@
         <td >
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showMap(route)"></button>
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
-          <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-danger" (click)="availableVehicles(route.startDate,route.endDate)"></button>
+          <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-danger" (click)="availableVehicles(route)"></button>
         </td>
       </tr>
     </ng-template>
@@ -119,6 +124,39 @@
     </tbody>
 
   </table>
+</p-dialog>
+
+<p-dialog [(visible)]="displayAvailableVehicleTable">
+
+  <div *ngIf="displayAvailableVehicleTable">
+    <p-table  [value]="availableVehicleList" responsiveLayout="scroll" [rowHover]="true">
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          Müsait Araçlar
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Araç Adı</th>
+          <th>Araç Modeli</th>
+          <th>Araç Plakası</th>
+          <th ></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-vehicle>
+        <tr>
+          <td>{{vehicle.name}}</td>
+          <td>{{vehicle.modelName}}</td>
+          <td>{{vehicle.license}}</td>
+          <td >
+            <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-success" (click)="selectVehicle(vehicle)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </div>
+
 </p-dialog>
 
 

@@ -20,6 +20,7 @@ export class VehicleComponent implements OnInit {
   displayRouteTable: boolean = false;
   displayRouteDetail: boolean = false;
   displayRouteMap: boolean = false;
+  displayAvailableVehicleTable: boolean = false;
 
   // Route map
   public routeMap!: GoogleMap;
@@ -29,7 +30,7 @@ export class VehicleComponent implements OnInit {
   addressList: Array<any> = [];
   routeList: Array<any> = [];
   vehicle: Vehicle = {driver: undefined, vehicleId: undefined, name: '', license: '', modelName: ''};
-  vehicleList: Array<any> = [];
+  availableVehicleList: Array<any> = [];
 
   constructor(public vehicleService: VehicleService, public dateService: DateService,
               public addressService: AddressService, private mapService: MapService) {
@@ -41,6 +42,7 @@ export class VehicleComponent implements OnInit {
   vehicleAddPage() {
     this.vehicleAddPageClick = true;
     this.routeAssignmentPageClick = false;
+    this.displayRouteTable = false;
   }
 
   async routeAssignmentPage() {
@@ -69,11 +71,24 @@ export class VehicleComponent implements OnInit {
     console.log(vehicles)
   }
 
-  async availableVehicles(start: any, end: any) {
-    let startDate = this.dateService.dateFormat(new Date(start));
-    let endDate = this.dateService.dateFormat(new Date(end));
-    let temp: any = await this.vehicleService.getAvailableVehicles(startDate, endDate).toPromise()
-    console.log(temp)
+  async selectVehicle(vehicle:any){
+    console.log(vehicle)
+    this.selectedRoute.vehicle = vehicle;
+    console.log(this.selectedRoute)
+    this.displayAvailableVehicleTable = false;
+    let newRoute:any = await this.addressService.updateRoute(this.selectedRoute).toPromise()
+    console.log(newRoute)
+    let temp:any = await this.addressService.getAllRouteByVehicleNull().toPromise()
+    this.routeList = temp
+  }
+
+  async availableVehicles(route: any) {
+    this.selectedRoute = route;
+    let startDate = this.dateService.dateFormat(new Date(route.startDate));
+    let endDate = this.dateService.dateFormat(new Date(route.endDate));
+    let temp: any = await this.vehicleService.getAvailableVehicles(startDate, endDate).toPromise();
+    this.availableVehicleList = temp;
+    this.displayAvailableVehicleTable = true;
   }
 
   public onMapReady(event: GoogleMap) {

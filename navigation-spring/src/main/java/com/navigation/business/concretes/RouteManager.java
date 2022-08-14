@@ -46,4 +46,11 @@ public class RouteManager implements RouteService {
     public MapDataDto getMapDataByRouteId(Long routeId) {
         return this.routeRepository.getMapDataByRouteId(routeId);
     }
+
+    @Override
+    public Route updateRoute(Route route) {
+        Route existingRoute = this.routeRepository.findById(route.getRouteId()).orElse(null);
+        existingRoute.setVehicle(route.getVehicle());
+        return this.routeRepository.save(existingRoute);
+    }
 }

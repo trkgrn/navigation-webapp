@@ -42,5 +42,10 @@ public class RouteController {
         return this.routeService.getMapDataByRouteId(routeId);
     }
 
+    @PutMapping(value = "/updateRoute")
+    public Route updateRoute(@RequestBody Route route){
+       return this.routeService.updateRoute(route);
+    }
+
 
 }

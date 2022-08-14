@@ -35,4 +35,6 @@ public interface RouteRepository extends JpaRepository<Route,Long> {
             "where r.routeId=:routeId")
     MapDataDto getMapDataByRouteId(Long routeId);
 
+
+
 }

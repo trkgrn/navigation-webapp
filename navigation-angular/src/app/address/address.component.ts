@@ -115,6 +115,7 @@ export interface Route{
   routeId:number;
   startDate:any;
   endDate:any;
+  vehicle:any;
   user:any;
   mapData:any;
   origin:any;
