@@ -33,7 +33,7 @@
       <tr>
         <td>{{route.name}}</td>
         <td>{{dateService.formatRouteDate(route.routeId,routeList,'start')}}</td>
-        <td>{{route.averageDistance/1000}} km</td>
+        <td>{{(route.averageDistance/1000).toFixed(2)}} km</td>
         <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
         <td >
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>

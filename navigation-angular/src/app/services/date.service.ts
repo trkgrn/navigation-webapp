@@ -62,14 +62,14 @@ export class DateService {
   }
 
   dateFormat(date:any){
-    let formattedDate = date.getUTCFullYear() +'-'+ (date.getUTCMonth() + 1) +'-'+date.getUTCDate() +' '+ date.getHours()+':'+
-      date.getUTCMinutes()+':'+date.getUTCSeconds();
+    let formattedDate = date.getFullYear() +'-'+ (date.getMonth() + 1) +'-'+date.getDate() +' '+ date.getHours()+':'+
+      date.getMinutes()+':'+date.getSeconds();
     return formattedDate;
   }
 
   dateFormatForHTML(date:any){
-    let formattedDate = date.getUTCDate() +'-'+ (date.getUTCMonth() + 1) +'-'+date.getUTCFullYear() +' '+ date.getHours()+':'+
-      date.getUTCMinutes();
+    let formattedDate = date.getDate() +'-'+ (date.getMonth() + 1) +'-'+date.getFullYear() +' '+ date.getHours()+':'+
+      date.getMinutes();
     return formattedDate;
   }
 }

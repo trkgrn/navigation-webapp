@@ -5,6 +5,7 @@ import {DateService} from "../services/date.service";
 import {AddressService} from "../services/address.service";
 import {GoogleMap, LatLng, Polyline, PolylineOptions} from "@agm/core/services/google-maps-types";
 import {MapService} from "../services/map.service";
+import {MessageService} from "primeng/api";
 
 declare var google: any;
 
@@ -33,7 +34,8 @@ export class VehicleComponent implements OnInit {
   availableVehicleList: Array<any> = [];
 
   constructor(public vehicleService: VehicleService, public dateService: DateService,
-              public addressService: AddressService, private mapService: MapService) {
+              public addressService: AddressService, private mapService: MapService,
+              private messageService: MessageService) {
   }
 
   ngOnInit(): void {
@@ -69,6 +71,8 @@ export class VehicleComponent implements OnInit {
     let newCar: any = await this.vehicleService.addVehicle(this.vehicle).toPromise()
     let vehicles: any = await this.vehicleService.getAllVehicle().toPromise()
     console.log(vehicles)
+    this.messageService.add({severity: 'success', summary: 'Araç eklendi!',
+      detail: newCar.name +" adlı "+newCar.modelName +" modelindeki " +newCar.license +" plakalı araç eklendi!"});
   }
 
   async selectVehicle(vehicle:any){
@@ -80,6 +84,9 @@ export class VehicleComponent implements OnInit {
     console.log(newRoute)
     let temp:any = await this.addressService.getAllRouteByVehicleNull().toPromise()
     this.routeList = temp
+    this.messageService.add({severity: 'success', summary: 'Araç görevlendirildi!',
+      detail: newRoute.name + " adlı rota " + newRoute.vehicle.license +" plakalı "
+        +newRoute.vehicle.modelName +" modelinde araca görevlendirildi!"});
   }
 
   async availableVehicles(route: any) {

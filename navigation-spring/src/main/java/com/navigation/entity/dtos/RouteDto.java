@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -20,4 +22,16 @@ public class RouteDto {
     private Long averageDuration;
     private Warehouse origin;
     private Warehouse destination;
+    private Long vehicleId;
+
+    public RouteDto(Long routeId, String name, Date startDate, Date endDate, Long averageDistance, Long averageDuration, Warehouse origin, Warehouse destination) {
+        this.routeId = routeId;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.averageDistance = averageDistance;
+        this.averageDuration = averageDuration;
+        this.origin = origin;
+        this.destination = destination;
+    }
 }

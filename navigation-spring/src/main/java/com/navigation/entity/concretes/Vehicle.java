@@ -30,8 +30,6 @@ public class Vehicle {
     private String modelName;
 
     @Column (name = "license",unique = true)
-    @NotEmpty
-    @NotNull
     private String license;
 
     @OneToMany(

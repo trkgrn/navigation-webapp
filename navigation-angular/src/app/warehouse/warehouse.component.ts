@@ -127,7 +127,7 @@ export class WarehouseComponent implements OnInit {
       this.infoWindow.open(event.map, event.overlay);
       event.map.setCenter(event.overlay.getPosition());
 
-      this.messageService.add({severity: 'info', summary: 'Marker Selected', detail: title});
+      this.messageService.add({severity: 'info', summary: 'Depo', detail: title});
     }
   }
 
