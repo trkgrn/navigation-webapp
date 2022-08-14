@@ -62,7 +62,7 @@
         <td>{{route.averageDistance/1000}} km</td>
         <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
         <td >
-          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showMap(route)"></button>
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
           <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-danger" (click)="availableVehicles(route.startDate,route.endDate)"></button>
         </td>
@@ -119,4 +119,14 @@
     </tbody>
 
   </table>
+</p-dialog>
+
+
+<p-dialog [(visible)]="displayRouteMap" [maximizable]="true" [style]="{width: '100%',height:'100%'}">
+
+  <agm-map [latitude]="40.99246515999449" [longitude]="29.4352343256"
+           (mapReady)="onMapReady($event)"
+           [disableDoubleClickZoom]="true">
+  </agm-map>
+
 </p-dialog>

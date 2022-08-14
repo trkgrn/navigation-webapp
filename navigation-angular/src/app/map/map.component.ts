@@ -4,8 +4,8 @@ import {} from 'googlemaps'
 import {AddressService} from "../services/address.service";
 import {Adres} from "../address/address.component";
 import {stringify} from 'zipson';
-import {parse} from "zipson/lib";
 import {DateService} from "../services/date.service";
+import {MapService} from "../services/map.service";
 
 
 declare var google: any;
@@ -42,6 +42,7 @@ export class MapComponent implements OnInit {
   displayMap: boolean = false;
   displayRouteTable: boolean = true;
   displayRouteDetail: boolean = false;
+  displayRouteMap: boolean = false
 
   adres: Array<Adres> = [];
   waypoint_order: Array<any> = [];
@@ -52,8 +53,11 @@ export class MapComponent implements OnInit {
   selectedRoute: any;
   compressMapData: any;
 
+  addressList: Array<any> = [];
+  markers: Array<any> = [];
+  routeList: Array<any> = []
 
-  constructor(private addressService: AddressService,public dateService:DateService) {
+  constructor(private addressService: AddressService,public dateService:DateService,private mapService:MapService) {
   }
 
   ngOnInit(): void {
@@ -81,8 +85,6 @@ export class MapComponent implements OnInit {
       this.waypoints.push(obj)
     }
   }
-
-
 
   async createRoute() {
     this.routeEndDate = this.dateService.calculateEndDate(this.routeStartDate,this.avgDuration);
@@ -121,7 +123,6 @@ export class MapComponent implements OnInit {
 
   }
 
-
   async receiveValue($event: any) {
     this.adres = $event.address;
     this.originData = $event.origin;
@@ -132,32 +133,6 @@ export class MapComponent implements OnInit {
     this.directionDisplay = true
     this.showMap()
   }
-
-  // private setCurrentLocation() {
-  //   if ('geolocation' in navigator) {
-  //     navigator.geolocation.getCurrentPosition((position) => {
-  //       this.latitude = position.coords.latitude;
-  //       this.longitude = position.coords.longitude;
-  //
-  //       this.origin = {lat: this.latitude, lng: this.longitude}
-  //       this.destination = {lat: this.latitude, lng: this.longitude}
-  //     });
-  //   }
-  // }
-
-
-  // doubleClick(event: any) {
-  //   console.log(event)
-  //
-  //   const obj = {location: {lat: event.coords.lat, lng: event.coords.lng}}
-  //   const obj2 = {lat: event.coords.lat, lng: event.coords.lng}
-  //
-  //   this.waypoints.push(obj)
-  //   this.locations.push(obj2)
-  //
-  //   console.log(this.waypoints)
-  // }
-
 
   rbActive() {
     this.rbClick = true;
@@ -182,102 +157,9 @@ export class MapComponent implements OnInit {
     this.displayMap = true;
   }
 
-  addressList: Array<any> = [];
-  template: Array<any> = [];
-  markers: Array<any> = [];
-  displayRouteMap: boolean = false
-  options: any;
-
-  setMapOnAll(map: GoogleMap | null) {
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(map);
-    }
-  }
-
-  deleteMarkers(): void {
-    this.setMapOnAll(null);
-    this.markers = [];
-  }
-
-  tempMapData: any
-
   async showRouteMap(route: any) {
-
-    this.deleteMarkers()
-
-    this.options = {
-      center: {lat: 38.5561096, lng: 33.3898941},
-      zoom: 6
-    };
-
-    try {
-      let response: any = await this.addressService.getMapDataByRouteId(route.routeId).toPromise();
-      //  console.log(response)
-      route.mapData = response.mapData
-    } catch (e) {
-      //   console.log("ERROOOORRR"+e);
-    }
     this.displayRouteMap = true
-    let event = parse(route.mapData)
-    //  console.log(event)
-
-    const {legs} = event.routes[0];
-    const myRoute = event.routes[0];
-
-    let list: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
-    let labelIndex = 1
-
-    let originMarker = new google.maps.Marker({
-      position: {lat: route.origin.address.coordinate.latitude, lng: route.origin.address.coordinate.longitude},
-      label: (labelIndex++) + ''
-    })
-    this.markers.push(originMarker)
-
-    for (const next of list) {
-      let marker = new google.maps.Marker({
-        position: {lat: next.coordinate.latitude, lng: next.coordinate.longitude},
-        label: (labelIndex++) + ''
-      })
-      this.markers.push(marker);
-
-    }
-
-    let destinationMarker = new google.maps.Marker({
-      position: {
-        lat: route.destination.address.coordinate.latitude,
-        lng: route.destination.address.coordinate.longitude
-      },
-      label: (labelIndex++) + ''
-    })
-    this.markers.push(destinationMarker);
-
-    this.setMapOnAll(this.routeMap);
-
-    const polylineOptions: PolylineOptions = {
-      strokeWeight: 6,
-      strokeOpacity: 0.55,
-      strokeColor: "#FF0000"
-    };
-
-    const colors = ['#0000FF', '#d40000', '#0000FF'];
-
-    this.polylines.forEach(polyline => polyline.setMap(null!));
-
-
-    legs.forEach((leg: { steps: any[]; }, index: string | number) => {
-
-      leg.steps.forEach(step => {
-        let nextSegment = google.maps.geometry.encoding.decodePath(step.polyline.points);
-        const stepPolyline: Polyline = new google.maps.Polyline(polylineOptions);
-
-        nextSegment.forEach((next: LatLng) => stepPolyline.getPath().push(next));
-
-        this.polylines.push(stepPolyline);
-        stepPolyline.setMap(this.routeMap);
-      });
-    });
-
-
+    this.markers = await this.mapService.drawDirection(route,this.routeMap,this.markers);
   }
 
   async showRouteDetail(route: any) {
@@ -285,12 +167,8 @@ export class MapComponent implements OnInit {
     this.selectedRoute = route;
     let temp: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
     this.addressList = temp;
-    let obj = {data: temp};
-    this.template.push(obj)
 
   }
-
-  routeList: Array<any> = []
 
   getAllRoute() {
     let temp = this.addressService.getAllRoutes()
@@ -316,9 +194,6 @@ export class MapComponent implements OnInit {
   // Hide origin polylines
   public renderOptions = {suppressPolylines: true};
 
-  // Custom polylines
-  public polylines: Array<Polyline> = [];
-
   // Current map
   public map!: GoogleMap;
 
@@ -338,42 +213,10 @@ export class MapComponent implements OnInit {
 
   public async onResponse(event: any) {
 
+    this.mapService.setDirection(this.map,event)
 
-    // Default style
-    const polylineOptions: PolylineOptions = {
-      strokeWeight: 6,
-      strokeOpacity: 0.55,
-      strokeColor: "#FF0000"
-    };
-
-    // Polylines strokeColor
-    const colors = ['#0000FF', '#d40000', '#0000FF'];
-
-    // Clear exist polylines
-    this.polylines.forEach(polyline => polyline.setMap(null!));
-
-    const {legs} = event.routes[0];
     const myRoute = event.routes[0];
     this.waypoint_order = myRoute.waypoint_order
-
-
-    legs.forEach((leg: { steps: any[]; }, index: string | number) => {
-
-      leg.steps.forEach(step => {
-        const nextSegment = step.path;
-        //   console.log("PATH: "+ step.path)
-        const stepPolyline: Polyline = new google.maps.Polyline(polylineOptions);
-
-        // Custom color
-
-
-        nextSegment.forEach((next: LatLng) => stepPolyline.getPath().push(next));
-
-        this.polylines.push(stepPolyline);
-        stepPolyline.setMap(this.map);
-      });
-    });
-
 
     if (this.control) {
 
@@ -389,12 +232,10 @@ export class MapComponent implements OnInit {
       this.control = true
     }
 
-    /////
   }
 
   pushCoordinateList(result: google.maps.DirectionsResult) {
     const myRoute = result.routes[0];
-
     const obj = {
       longitude: myRoute.legs[0].start_location.lng(),
       latitude: myRoute.legs[0].start_location.lat()
@@ -407,8 +248,6 @@ export class MapComponent implements OnInit {
       }
       this.coordinateList.push(object)
     }
-
-
   }
 
   computeTotalDistanceAndDuration(result: google.maps.DirectionsResult) {
