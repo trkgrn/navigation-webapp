@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "zipson"
+            ],
             "outputPath": "dist/web",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -55,7 +58,14 @@
             },
             "development": {
               "buildOptimizer": false,
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
