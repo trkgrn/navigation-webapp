@@ -33,6 +33,7 @@ import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {CalendarModule} from "primeng/calendar";
 import { VehicleComponent } from './vehicle/vehicle.component';
+import { ManageComponent } from './manage/manage.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { VehicleComponent } from './vehicle/vehicle.component';
     AddRowDirective,
     TestComponent,
     WarehouseComponent,
-    VehicleComponent
+    VehicleComponent,
+    ManageComponent
   ],
   imports: [
     BrowserModule,

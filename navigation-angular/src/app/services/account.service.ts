@@ -21,27 +21,27 @@ export class AccountService {
 
 
   signout() {
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
 
     this.router.navigateByUrl('login');
   }
 
   isUserSignedin() {
-    return sessionStorage.getItem('token') !== null;
+    return localStorage.getItem('token') !== null;
   }
 
   getSignedinUser() {
-    return sessionStorage.getItem('username') as string;
+    return localStorage.getItem('username') as string;
   }
 
   getToken() {
-    let token = sessionStorage.getItem('token') as string;
+    let token = localStorage.getItem('token') as string;
     return token;
   }
 
   getRole(){
-    let role = sessionStorage.getItem("role") as string;
+    let role = localStorage.getItem("role") as string;
     return role;
   }
 
@@ -69,11 +69,11 @@ export class AccountService {
   login(user: User): Observable<object> {
     return this.http.post<any>(this.rootURL + 'login', user, {headers: new HttpHeaders({ 'Content-Type': 'application/json' })}).pipe(map((resp) => {
       if (typeof user.username === "string") {
-        sessionStorage.setItem('username', user.username);
-        sessionStorage.setItem('role',resp.role.name);
+        localStorage.setItem('username', user.username);
+        localStorage.setItem('role',resp.role.name);
         console.log(resp.role.name)
       }
-      sessionStorage.setItem('token',  resp.token);
+      localStorage.setItem('token',  resp.token);
       return resp;
     }));
   }

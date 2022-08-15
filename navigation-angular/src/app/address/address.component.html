@@ -7,24 +7,27 @@
 </span>
   <br><br>
   <span class="p-float-label">
-            <p-calendar id="calendar" formControlName="startDate" [showTime]="true" [showIcon]="true" dateFormat="dd-mm-yy" (click)="test()" inputId="calendar" [(ngModel)]="selectedRouteDate" [required]="true"></p-calendar>
+            <p-calendar id="calendar" formControlName="startDate" [showTime]="true" [showIcon]="true"
+                        dateFormat="dd-mm-yy" (click)="test()" inputId="calendar" [(ngModel)]="selectedRouteDate"
+                        [required]="true"></p-calendar>
             <label for="calendar">Rota Başlangıç Tarihi</label>
-        </span>
+  </span>
   <br><br>
   <span class="p-float-label">
-  <p-dropdown id="origins" inputId="origins" formControlName="origin" [options]="warehouses" [(ngModel)]="selectedOrigin" placeholder="Başlangıç Durağı"
+  <p-dropdown id="origins" inputId="origins" formControlName="origin" [options]="warehouses"
+              [(ngModel)]="selectedOrigin" placeholder="Başlangıç Durağı"
               optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
   <label for="origins">Başlangıç Durağı</label>
 </span>
   <br><br>
 
   <span class="p-float-label">
-  <p-dropdown id="destinations" inputId="detinations" formControlName="destination" [options]="warehouses" [(ngModel)]="selectedDestination" placeholder="Bitiş Durağı"
+  <p-dropdown id="destinations" inputId="detinations" formControlName="destination" [options]="warehouses"
+              [(ngModel)]="selectedDestination" placeholder="Bitiş Durağı"
               optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
 <label for="destinations">Bitiş Durağı</label>
 </span> <br>
 </div>
-
 
 
 <p-table #dt [value]="adres" dataKey="addressId" editMode="row">

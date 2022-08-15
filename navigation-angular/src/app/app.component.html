@@ -30,9 +30,9 @@
             </a>
           </li>
           <li *ngIf="hasRoleManager()" class="nav-item">
-            <a class="nav-link" routerLink="/google-map">
+            <a class="nav-link" routerLink="/route">
               <span data-feather="shopping-cart" class="align-text-bottom"></span>
-              Rota Oluştur
+              Rota
             </a>
           </li>
           <li *ngIf="hasRoleDriver() || hasRoleManager()" class="nav-item">
@@ -51,6 +51,12 @@
             <a class="nav-link" routerLink="/vehicle">
               <span data-feather="bar-chart-2" class="align-text-bottom"></span>
               Araçlar
+            </a>
+          </li>
+          <li *ngIf="hasRoleManager()" class="nav-item">
+            <a class="nav-link" routerLink="/manage">
+              <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+              Yönetim
             </a>
           </li>
         </ul>

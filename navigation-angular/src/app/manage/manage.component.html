@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand">Şoför Yönetim</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link " (click)="driverListPage()">Şoför Listesi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " (click)="driverAssignmentPage()">Şoför Ataması</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+
+<div *ngIf="displayDriverListPage">
+  <a>Eklenecek..</a>
+</div>
+
+<div *ngIf="displayDriverAssignmentPage">
+  <p-table [value]="vehicleList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Araç Listesi
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Araç Adı</th>
+        <th>Araç Modeli</th>
+        <th>Araç Plakası</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-vehicle>
+      <tr>
+        <td>{{vehicle.name}}</td>
+        <td>{{vehicle.modelName}}</td>
+        <td>{{vehicle.license}}</td>
+        <td>
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-user"
+                  class="p-button-rounded p-button-help" (click)="availableDrivers(vehicle)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>
+
+<p-dialog [(visible)]="displayDriverSelectDialog" [style]="{width: '800px',height:'550px'}" [resizable]="false">
+  <div [formGroup]="form">
+    <br>
+    <span class="p-float-label mb-4">
+          <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" [readonlyInput]="true" id="range"
+                      formControlName="range" dateFormat="dd-mm-yy" inputId="range" [required]="true"></p-calendar>
+          <label for="range">Başlangıç - Bitiş</label>
+    </span>
+    <span class="p-float-label mb-4">
+  <p-dropdown id="type" inputId="type" formControlName="type" [options]="driverTypes"
+              [(ngModel)]="selectedType" placeholder="Sürücü Rolü"
+              optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
+  <label for="type">Sürücü Rolü</label>
+</span>
+  </div>
+  <button class="mt-4" pButton type="button" icon="pi pi-map-marker" [label]="'Şoförleri Listele'" (click)="test()"
+          [disabled]="form.invalid || rangeDates[1]==null"></button>
+</p-dialog>

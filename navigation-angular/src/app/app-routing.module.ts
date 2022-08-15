@@ -9,17 +9,19 @@ import {AddressComponent} from "./address/address.component";
 import {TestComponent} from "./test/test.component";
 import {WarehouseComponent} from "./warehouse/warehouse.component";
 import {VehicleComponent} from "./vehicle/vehicle.component";
+import {ManageComponent} from "./manage/manage.component";
 
 const routes: Routes = [
   {path:"home",component:HomeComponent,canActivate:[LoginGuard],data:{roles:['Manager','Driver']}},
   {path:"",redirectTo:"home",pathMatch:"full"},
   {path:"login",component:LoginComponent},
   {path:"register",component:RegisterComponent},
-  {path:"google-map",component:MapComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
+  {path:"route",component:MapComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
   {path:"add-address",component:AddressComponent,canActivate:[LoginGuard]},
   {path:"test",component:TestComponent,canActivate:[LoginGuard],data:{roles:['Manager','Driver']}},
   {path:"warehouse",component:WarehouseComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
-  {path:"vehicle",component:VehicleComponent,canActivate:[LoginGuard],data:{roles:['Manager']}}
+  {path:"vehicle",component:VehicleComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
+  {path:"manage",component:ManageComponent,canActivate:[LoginGuard],data:{roles: ['Manager']}}
 ];
 
 @NgModule({
