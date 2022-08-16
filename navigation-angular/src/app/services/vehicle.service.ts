@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Vehicle} from "../vehicle/vehicle.component";
@@ -8,23 +8,31 @@ import {AccountService} from "./account.service";
   providedIn: 'root'
 })
 export class VehicleService {
-  rootURL:string = environment.rootUrl;
-  constructor(private http:HttpClient,private accountService:AccountService) { }
+  rootURL: string = environment.rootUrl;
 
-  addVehicle(vehicle:Vehicle){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return this.http.post<Vehicle>( this.rootURL + "addVehicle",vehicle,{headers});
+  constructor(private http: HttpClient, private accountService: AccountService) {
   }
 
-  getAllVehicle(){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllVehicle",{headers});
+  addVehicle(vehicle: Vehicle) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.post<Vehicle>(this.rootURL + "addVehicle", vehicle, {headers});
   }
 
-  getAvailableVehicles(startDate:any,endDate:any){
+  getAllVehicle() {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllVehicle", {headers});
+  }
+
+  getAvailableVehicles(startDate: any, endDate: any) {
     console.log(startDate)
     console.log(endDate)
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAvailableVehicles?startDate="+startDate+"&endDate="+endDate,{headers});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAvailableVehicles?startDate=" + startDate + "&endDate=" + endDate, {headers});
+  }
+
+  findNotAssignmentVehicles(startDate: any, endDate: any, typeId: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "findAllNotAssignmentVehicle?startDate=" + startDate + "&endDate=" + endDate + "&typeId=" + typeId,
+      {headers});
   }
 }

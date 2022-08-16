@@ -1,5 +1,6 @@
 package com.navigation.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "vehicle", schema = "public")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","drivers"})
 public class Vehicle {
     @Id
     @Column(name = "vehicle_id")

@@ -26,6 +26,23 @@
 </div>
 
 <div *ngIf="displayDriverAssignmentPage">
+  <div [formGroup]="form">
+    <br>
+    <span class="p-float-label mb-4">
+          <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" [readonlyInput]="true" id="range"
+                      formControlName="range" dateFormat="dd-mm-yy" inputId="range" [required]="true"></p-calendar>
+          <label for="range">Başlangıç - Bitiş</label>
+    </span>
+    <span class="p-float-label mb-4">
+  <p-dropdown id="type" inputId="type" formControlName="type" [options]="driverTypes"
+              [(ngModel)]="selectedType" placeholder="Sürücü Rolü"
+              optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
+  <label for="type">Sürücü Rolü</label>
+</span>
+  </div>
+  <button class="mt-4 mb-4" pButton type="button" icon="pi pi-car" [label]="'Araçları Listele'"
+          (click)="findNotAssignmentVehicles()"
+          [disabled]="form.invalid || rangeDates[1]==null"></button>
   <p-table [value]="vehicleList" responsiveLayout="scroll" [rowHover]="true">
     <ng-template pTemplate="caption">
       <div class="table-header">
@@ -47,7 +64,7 @@
         <td>{{vehicle.license}}</td>
         <td>
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-user"
-                  class="p-button-rounded p-button-help" (click)="availableDrivers(vehicle)"></button>
+                  class="p-button-rounded p-button-help" (click)="findAvailableDrivers(vehicle)"></button>
         </td>
       </tr>
     </ng-template>
@@ -55,21 +72,30 @@
 
 </div>
 
-<p-dialog [(visible)]="displayDriverSelectDialog" [style]="{width: '800px',height:'550px'}" [resizable]="false">
-  <div [formGroup]="form">
-    <br>
-    <span class="p-float-label mb-4">
-          <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" [readonlyInput]="true" id="range"
-                      formControlName="range" dateFormat="dd-mm-yy" inputId="range" [required]="true"></p-calendar>
-          <label for="range">Başlangıç - Bitiş</label>
-    </span>
-    <span class="p-float-label mb-4">
-  <p-dropdown id="type" inputId="type" formControlName="type" [options]="driverTypes"
-              [(ngModel)]="selectedType" placeholder="Sürücü Rolü"
-              optionLabel="name" optionValue="" [showClear]="true" [required]="true"></p-dropdown>
-  <label for="type">Sürücü Rolü</label>
-</span>
-  </div>
-  <button class="mt-4" pButton type="button" icon="pi pi-map-marker" [label]="'Şoförleri Listele'" (click)="test()"
-          [disabled]="form.invalid || rangeDates[1]==null"></button>
+<p-dialog [(visible)]="displayDriverSelectDialog" [style]="{width: '800px',height:'550px'}" [modal]="true"
+          styleClass="p-fluid" [resizable]="false">
+
+  <p-table [value]="availableDriverList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Müsait Sürücü Listesi
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Sürücü Adı</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-driver>
+      <tr>
+        <td>{{driver.user.username}}</td>
+        <td>
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-user"
+                  class="p-button-rounded p-button-help" (click)="driverAssigned(driver)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </p-dialog>

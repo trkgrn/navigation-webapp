@@ -1,7 +1,10 @@
 package com.navigation.controller;
 
+import com.navigation.business.abstracts.DriverService;
 import com.navigation.business.abstracts.UserService;
+import com.navigation.entity.concretes.Driver;
 import com.navigation.entity.concretes.User;
+import com.navigation.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +21,12 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
-        this.userService= userService;
-    }
+    private DriverService driverService;
+
 
 
     @GetMapping("/")
@@ -46,7 +49,10 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> add(@Valid @RequestBody User user){
-        return  ResponseEntity.ok(this.userService.add(user));
+        User addedUser = this.userService.add(user);
+        if(addedUser.getRole().getRoleId()==1)
+            this.driverService.addDriver(new Driver(addedUser));
+        return  ResponseEntity.ok(addedUser);
     }
 
 }

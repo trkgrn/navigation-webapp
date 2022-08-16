@@ -1,5 +1,6 @@
 package com.navigation.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "driver", schema = "public")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","vehicles"})
 public class Driver {
     @Id
     @Column(name = "driver_id")
@@ -31,4 +33,8 @@ public class Driver {
             targetEntity = DriversOfVehicles.class
     )
     private List<DriversOfVehicles> vehicles = new ArrayList<>();
+
+    public Driver(User user) {
+        this.user = user;
+    }
 }

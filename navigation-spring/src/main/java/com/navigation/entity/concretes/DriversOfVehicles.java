@@ -16,16 +16,16 @@ import java.util.Date;
 @Table(name = "drivers_of_vehicles", schema = "public")
 public class DriversOfVehicles {
 
-    @EmbeddedId
-    private DriversOfVehiclesId id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("vehicleId")
     @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicle_id")
     private Vehicle vehicle;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("driverId")
     @JoinColumn(name = "driver_id",referencedColumnName = "driver_id")
     private Driver driver;
 
