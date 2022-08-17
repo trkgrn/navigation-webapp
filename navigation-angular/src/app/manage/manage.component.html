@@ -30,7 +30,8 @@
     <br>
     <span class="p-float-label mb-4">
           <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" [readonlyInput]="true" id="range"
-                      formControlName="range" dateFormat="dd-mm-yy" inputId="range" [required]="true"></p-calendar>
+                      formControlName="range" dateFormat="dd-mm-yy" inputId="range" [required]="true"
+                      [minDate]="currentDate"></p-calendar>
           <label for="range">Başlangıç - Bitiş</label>
     </span>
     <span class="p-float-label mb-4">

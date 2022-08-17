@@ -20,6 +20,7 @@ export class AddressComponent implements OnInit {
   warehouseList:any;
   routeName:any;
   form:FormGroup;
+  currentDate:Date = new Date();
   async ngOnInit() {
   let temp:any = await this.addressService.getAllWarehouse().toPromise()
   this.warehouses = temp

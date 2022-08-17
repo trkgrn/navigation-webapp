@@ -3,7 +3,7 @@ import {VehicleService} from "../services/vehicle.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DriverService} from "../services/driver.service";
 import {DateService} from "../services/date.service";
-import {MessageService} from "primeng/api";
+import {MessageService, PrimeNGConfig} from "primeng/api";
 
 @Component({
   selector: 'app-manage',
@@ -23,9 +23,11 @@ export class ManageComponent implements OnInit {
   selectedVehicle: any;
   selectedType: any;
   availableDriverList: Array<any> = [];
+  currentDate: Date = new Date();
+
 
   constructor(private driverService: DriverService, private vehicleService: VehicleService,
-              private fb: FormBuilder, private dateService: DateService, private messageService: MessageService) {
+              private fb: FormBuilder, public dateService: DateService, private messageService: MessageService) {
     this.form = fb.group({
       range: [null, Validators.required],
       type: [null, Validators.required]

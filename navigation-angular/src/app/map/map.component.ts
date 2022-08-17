@@ -6,6 +6,8 @@ import {Adres} from "../address/address.component";
 import {stringify} from 'zipson';
 import {DateService} from "../services/date.service";
 import {MapService} from "../services/map.service";
+import {VehicleService} from "../services/vehicle.service";
+import {MessageService} from "primeng/api";
 
 
 declare var google: any;
@@ -42,7 +44,9 @@ export class MapComponent implements OnInit {
   displayMap: boolean = false;
   displayRouteTable: boolean = true;
   displayRouteDetail: boolean = false;
-  displayRouteMap: boolean = false
+  displayRouteMap: boolean = false;
+  displayNotAssignmentRoutesTable : boolean = false;
+  displayAvailableVehicleTable : boolean = false;
 
   adres: Array<Adres> = [];
   waypoint_order: Array<any> = [];
@@ -52,12 +56,16 @@ export class MapComponent implements OnInit {
   routeEndDate?: Date;
   selectedRoute: any;
   compressMapData: any;
+  notAssignedRouteList:Array<any> = []
+  availableVehicleList:Array<any> = []
 
   addressList: Array<any> = [];
   markers: Array<any> = [];
   routeList: Array<any> = []
 
-  constructor(private addressService: AddressService,public dateService:DateService,private mapService:MapService) {
+  constructor(private addressService: AddressService, private vehicleService:VehicleService,
+              public dateService:DateService, private messageService:MessageService,
+              private mapService:MapService) {
   }
 
   ngOnInit(): void {
@@ -145,6 +153,7 @@ export class MapComponent implements OnInit {
     this.display = false
     this.directionDisplay = false
     this.rbClick = false
+    this.displayNotAssignmentRoutesTable = false;
     this.getAllRoute()
   }
 
@@ -153,11 +162,25 @@ export class MapComponent implements OnInit {
     this.directionDisplay = false;
   }
 
+ async showNotAssignmentRoutes(){
+    this.displayRouteTable = false;
+    this.displayMap = false;
+    this.display = false;
+    this.directionDisplay = false;
+    this.rbClick = false;
+    this.displayNotAssignmentRoutesTable = true;
+    let temp: any = await this.addressService.getAllRouteByVehicleNull().toPromise()
+    this.notAssignedRouteList = temp
+  }
+
   showMap() {
     this.displayMap = true;
   }
 
   async showRouteMap(route: any) {
+    this.selectedRoute = route;
+    let list: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
+    this.addressList = list;
     this.displayRouteMap = true
     this.markers = await this.mapService.drawDirection(route,this.routeMap,this.markers);
   }
@@ -168,6 +191,29 @@ export class MapComponent implements OnInit {
     let temp: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
     this.addressList = temp;
 
+  }
+
+  async availableVehicles(route: any) {
+    this.selectedRoute = route;
+    let startDate = this.dateService.dateFormat(new Date(route.startDate));
+    let endDate = this.dateService.dateFormat(new Date(route.endDate));
+    let temp: any = await this.vehicleService.getAvailableVehicles(startDate, endDate).toPromise();
+    this.availableVehicleList = temp;
+    this.displayAvailableVehicleTable = true;
+  }
+
+  async selectVehicle(vehicle:any){
+    console.log(vehicle)
+    this.selectedRoute.vehicle = vehicle;
+    console.log(this.selectedRoute)
+    this.displayAvailableVehicleTable = false;
+    let newRoute:any = await this.addressService.updateRoute(this.selectedRoute).toPromise()
+    console.log(newRoute)
+    let temp:any = await this.addressService.getAllRouteByVehicleNull().toPromise()
+    this.routeList = temp
+    this.messageService.add({severity: 'success', summary: 'Araç görevlendirildi!',
+      detail: newRoute.name + " adlı rota " + newRoute.vehicle.license +" plakalı "
+        +newRoute.vehicle.modelName +" modelinde araca görevlendirildi!"});
   }
 
   getAllRoute() {

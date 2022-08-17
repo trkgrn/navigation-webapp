@@ -1,22 +1,24 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" >Araçlar</a>
+      <a class="navbar-brand">Araçlar</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link "  (click)="vehicleAddPage()">Araç Ekle</a>
+          <a class="nav-link " (click)="vehicleAddPage()">Araç Ekle</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " (click)="routeAssignmentPage()" >Rota Ataması</a>
+          <a class="nav-link " (click)="vehicleListPage()">Araç Listesi</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 <p-toast [style]="{marginTop: '80px'}"></p-toast>
+
 <main *ngIf="vehicleAddPageClick" class="form-signin w-100 m-auto text-center">
   <form #vehicleAddForm="ngForm" (ngSubmit)="add(vehicleAddForm)">
     <br>
@@ -31,9 +33,10 @@
       <label for="model">Araç Modeli</label>
     </div>
     <div class="form-label-group form-floating mb-4">
-      <input type="text" placeholder="Araç Plakası" #license="ngModel" [(ngModel)]="vehicle.license" class="form-control"
+      <input type="text" placeholder="Araç Plakası" #license="ngModel" [(ngModel)]="vehicle.license"
+             class="form-control"
              name="license" id="license" required>
-      <label for="license">Araç Plakası</label>
+      <label class="form-label" for="license">Araç Plakası</label>
     </div>
 
     <br>
@@ -42,129 +45,27 @@
   </form>
 </main>
 
-<div *ngIf="displayRouteTable">
-  <p-table  [value]="routeList" responsiveLayout="scroll" [rowHover]="true">
+<div *ngIf="vehicleListPageClick">
+  <p-table [value]="vehicleList" styleClass="p-datatable-lg" responsiveLayout="scroll" [rowHover]="true">
     <ng-template pTemplate="caption">
       <div class="table-header">
-        Görevlendirilmemiş Rotalar
+        Müsait Araçlar
       </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>Rota Adı</th>
-        <th>Başlangıç Tarihi</th>
-        <th>Bitiş Tarihi</th>
-        <th>Toplam Mesafe</th>
-        <th>Ortalama Süre</th>
-        <th ></th>
+        <th>Araç Adı</th>
+        <th>Araç Modeli</th>
+        <th>Araç Plakası</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-route>
+    <ng-template pTemplate="body" let-vehicle>
       <tr>
-        <td>{{route.name}}</td>
-        <td>{{dateService.formatRouteDate(route.routeId,routeList,'start')}}</td>
-        <td>{{dateService.formatRouteDate(route.routeId,routeList,'end')}}</td>
-        <td>{{(route.averageDistance/1000).toFixed(2)}} km</td>
-        <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
-        <td >
-          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker" class="p-button-rounded p-button-help" (click)="showMap(route)"></button>
-          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary" (click)="showRouteDetail(route)"></button>
-          <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-danger" (click)="availableVehicles(route)"></button>
-        </td>
+        <td>{{vehicle.name}}</td>
+        <td>{{vehicle.modelName}}</td>
+        <td>{{vehicle.license}}</td>
       </tr>
     </ng-template>
   </p-table>
 
 </div>
-
-<p-dialog [(visible)]="displayRouteDetail">
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Sıra</th>
-      <th>Şehir</th>
-      <th>İlçe</th>
-      <th>Mahalle</th>
-      <th>Sokak</th>
-      <th>Bina No</th>
-      <th>Daire No</th>
-      <th style="width: 8rem"></th>
-    </tr>
-    </thead>
-
-    <tbody class="table-group-divider">
-    <tr>
-      <td>İlk Durak</td>
-      <td>{{selectedRoute?.origin.address.sehir}}</td>
-      <td>{{selectedRoute?.origin.address.mahalle}}</td>
-      <td>{{selectedRoute?.origin.address.ilce}}</td>
-      <td>{{selectedRoute?.origin.address.sokak}}</td>
-      <td>{{selectedRoute?.origin.address.binaNo}}</td>
-      <td>Depo Adı: {{selectedRoute?.origin.name}}</td>
-    </tr>
-    <tr *ngFor="let address of addressList">
-      <td>{{address.orderNo}}</td>
-      <td>{{address.sehir}}</td>
-      <td>{{address.ilce}}</td>
-      <td>{{address.mahalle}}</td>
-      <td>{{address.sokak}}</td>
-      <td>{{address.binaNo}}</td>
-      <td>{{address.daireNo}}</td>
-    </tr>
-    <tr>
-      <td>Son Durak</td>
-      <td>{{selectedRoute?.destination?.address.sehir}}</td>
-      <td>{{selectedRoute?.destination?.address.ilce}}</td>
-      <td>{{selectedRoute?.destination?.address.mahalle}}</td>
-      <td>{{selectedRoute?.destination?.address.sokak}}</td>
-      <td>{{selectedRoute?.destination?.address.binaNo}}</td>
-      <td>Depo Adı: {{selectedRoute?.destination?.name}}</td>
-    </tr>
-
-    </tbody>
-
-  </table>
-</p-dialog>
-
-<p-dialog [(visible)]="displayAvailableVehicleTable">
-
-  <div *ngIf="displayAvailableVehicleTable">
-    <p-table  [value]="availableVehicleList" responsiveLayout="scroll" [rowHover]="true">
-      <ng-template pTemplate="caption">
-        <div class="table-header">
-          Müsait Araçlar
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Araç Adı</th>
-          <th>Araç Modeli</th>
-          <th>Araç Plakası</th>
-          <th ></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-vehicle>
-        <tr>
-          <td>{{vehicle.name}}</td>
-          <td>{{vehicle.modelName}}</td>
-          <td>{{vehicle.license}}</td>
-          <td >
-            <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-success" (click)="selectVehicle(vehicle)"></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-
-  </div>
-
-</p-dialog>
-
-
-<p-dialog [(visible)]="displayRouteMap" [maximizable]="true" [style]="{width: '100%',height:'100%'}">
-
-  <agm-map [latitude]="40.99246515999449" [longitude]="29.4352343256"
-           (mapReady)="onMapReady($event)"
-           [disableDoubleClickZoom]="true">
-  </agm-map>
-
-</p-dialog>
