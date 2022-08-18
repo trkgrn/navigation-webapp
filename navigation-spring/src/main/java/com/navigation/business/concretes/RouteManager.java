@@ -6,6 +6,8 @@ import com.navigation.entity.dtos.MapDataDto;
 import com.navigation.entity.dtos.RouteDto;
 import com.navigation.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,13 +34,20 @@ public class RouteManager implements RouteService {
     }
 
     @Override
+    public List<RouteDto> findAllRoutes(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        return this.routeRepository.findAllRoutes(pageable);
+    }
+
+    @Override
     public List<RouteDto> findRoutesByVehicleId(Long vehicleId) {
         return this.routeRepository.findRoutesByVehicleId(vehicleId);
     }
 
     @Override
-    public List<RouteDto> findRoutesByVehicleNull() {
-        return this.routeRepository.findRoutesByVehicleNull();
+    public List<RouteDto> findRoutesByVehicleNull(int pageNo,int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        return this.routeRepository.findRoutesByVehicleNull(pageable);
     }
 
 
@@ -52,5 +61,15 @@ public class RouteManager implements RouteService {
         Route existingRoute = this.routeRepository.findById(route.getRouteId()).orElse(null);
         existingRoute.setVehicle(route.getVehicle());
         return this.routeRepository.save(existingRoute);
+    }
+
+    @Override
+    public Long routeCount() {
+        return this.routeRepository.count();
+    }
+
+    @Override
+    public Long countRouteByVehicleIsNull() {
+        return this.routeRepository.countRouteByVehicleIsNull();
     }
 }

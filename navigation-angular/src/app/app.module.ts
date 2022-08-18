@@ -34,6 +34,7 @@ import {MessageService} from "primeng/api";
 import {CalendarModule} from "primeng/calendar";
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { ManageComponent } from './manage/manage.component';
+import {PaginatorModule} from "primeng/paginator";
 
 
 @NgModule({
@@ -50,33 +51,34 @@ import { ManageComponent } from './manage/manage.component';
     VehicleComponent,
     ManageComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    AgmCoreModule.forRoot({
-      apiKey: environment.googleApiKey
-    }),
-    AgmDirectionModule,
-    DialogModule,
-    NoopAnimationsModule,
-    ButtonModule,
-    TableModule,
-    InputTextModule,
-    ToolbarModule,
-    FileUploadModule,
-    RippleModule,
-    DropdownModule,
-    AutoCompleteModule,
-    GMapModule,
-    ToastModule,
-    AgmDirectionModule,
-    AgmDirectionModule,
-    CalendarModule,
-    AgmDirectionModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        AgmCoreModule.forRoot({
+            apiKey: environment.googleApiKey
+        }),
+        AgmDirectionModule,
+        DialogModule,
+        NoopAnimationsModule,
+        ButtonModule,
+        TableModule,
+        InputTextModule,
+        ToolbarModule,
+        FileUploadModule,
+        RippleModule,
+        DropdownModule,
+        AutoCompleteModule,
+        GMapModule,
+        ToastModule,
+        AgmDirectionModule,
+        AgmDirectionModule,
+        CalendarModule,
+        AgmDirectionModule,
+        ReactiveFormsModule,
+        PaginatorModule
+    ],
   providers: [AccountService,LoginGuard,MessageService],
   bootstrap: [AppComponent]
 })

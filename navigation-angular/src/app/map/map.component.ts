@@ -43,10 +43,9 @@ export class MapComponent implements OnInit {
   display: boolean = false;
   displayMap: boolean = false;
   displayRouteTable: boolean = true;
-  displayRouteDetail: boolean = false;
   displayRouteMap: boolean = false;
-  displayNotAssignmentRoutesTable : boolean = false;
-  displayAvailableVehicleTable : boolean = false;
+  displayNotAssignmentRoutesTable: boolean = false;
+  displayAvailableVehicleTable: boolean = false;
 
   adres: Array<Adres> = [];
   waypoint_order: Array<any> = [];
@@ -56,21 +55,42 @@ export class MapComponent implements OnInit {
   routeEndDate?: Date;
   selectedRoute: any;
   compressMapData: any;
-  notAssignedRouteList:Array<any> = []
-  availableVehicleList:Array<any> = []
+  notAssignedRouteList: Array<any> = []
+  availableVehicleList: Array<any> = []
 
   addressList: Array<any> = [];
   markers: Array<any> = [];
-  routeList: Array<any> = []
+  routeList: Array<any> = [];
+  first=0;
+  first2=0;
+  totalAllRoute:any;
+  totalNotAssignmentRoute:any;
 
-  constructor(private addressService: AddressService, private vehicleService:VehicleService,
-              public dateService:DateService, private messageService:MessageService,
-              private mapService:MapService) {
+  constructor(private addressService: AddressService, private vehicleService: VehicleService,
+              public dateService: DateService, private messageService: MessageService,
+              private mapService: MapService) {
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
     //this.setCurrentLocation()
-    this.getAllRoute()
+   let total:any = await this.addressService.getRouteCount().toPromise();
+    this.totalAllRoute = total;
+   let temp:any = await this.addressService.getAllRoutesByPage(0,10).toPromise();
+   this.routeList = temp;
+  }
+
+ async onPageChange(event:any){
+    let pageNo = event.page;
+    let pageSize = event.rows;
+    let routeListByPage : any = await this.addressService.getAllRoutesByPage(pageNo,pageSize).toPromise()
+    this.routeList = routeListByPage;
+  }
+
+  async onPageChange2(event:any){
+    let pageNo = event.page;
+    let pageSize = event.rows;
+    let routeListByPage: any = await this.addressService.getAllRouteByVehicleNull(pageNo,pageSize).toPromise();
+    this.notAssignedRouteList = routeListByPage;
   }
 
   waypointFormat() {
@@ -82,20 +102,20 @@ export class MapComponent implements OnInit {
       lat: this.destinationData.address.coordinate.latitude,
       lng: this.destinationData.address.coordinate.longitude
     }
-    this.originLatlng = originObj
-    this.destinationLatlng = destinationObj
+    this.originLatlng = originObj;
+    this.destinationLatlng = destinationObj;
     for (let i = 0; i < this.adres.length; i++) {
       const obj = {
         location: this.adres[i].mahalle + ' MAH ' + this.adres[i].sokak + ' SK. No:'
           + this.adres[i].binaNo +
           ' ' + this.adres[i].ilce + '/' + this.adres[i].sehir
       }
-      this.waypoints.push(obj)
+      this.waypoints.push(obj);
     }
   }
 
   async createRoute() {
-    this.routeEndDate = this.dateService.calculateEndDate(this.routeStartDate,this.avgDuration);
+    this.routeEndDate = this.dateService.calculateEndDate(this.routeStartDate, this.avgDuration);
     let obj = {
       originId: this.originData.warehouseId,
       destinationId: this.destinationData.warehouseId,
@@ -105,7 +125,7 @@ export class MapComponent implements OnInit {
       mapData: this.compressMapData,
       startDate: this.routeStartDate,
       endDate: this.routeEndDate
-    }
+    };
     const route: any = await this.addressService.addRoute(obj).toPromise();
     this.adres.map(item => {
       item.addressId = 0,
@@ -117,17 +137,20 @@ export class MapComponent implements OnInit {
         },
         item.orderNo = 0
 
-    })
+    });
 
     for (let i = 0; i < this.adres.length; i++) {
-      let temp = this.waypoint_order[i]
-      const addedCoordinate: any = await this.addressService.addCoordinate(this.coordinateList[i + 1]).toPromise()
-      this.adres[temp].coordinate.coordinateId = addedCoordinate.coordinateId
+      let temp = this.waypoint_order[i];
+      const addedCoordinate: any = await this.addressService.addCoordinate(this.coordinateList[i + 1]).toPromise();
+      this.adres[temp].coordinate.coordinateId = addedCoordinate.coordinateId;
       this.adres[temp].orderNo = i + 1;
     }
 
 
-    const addressList = await this.addressService.addAddressList(this.adres).toPromise()
+    const addressList = await this.addressService.addAddressList(this.adres).toPromise();
+
+    let total:any = await this.addressService.getRouteCount().toPromise();
+    this.totalAllRoute = total;
 
   }
 
@@ -137,9 +160,9 @@ export class MapComponent implements OnInit {
     this.destinationData = $event.destination;
     this.routeName = $event.routeName;
     this.routeStartDate = $event.startDate;
-    this.waypointFormat()
-    this.directionDisplay = true
-    this.showMap()
+    this.waypointFormat();
+    this.directionDisplay = true;
+    this.showMap();
   }
 
   rbActive() {
@@ -147,14 +170,15 @@ export class MapComponent implements OnInit {
     this.displayRouteTable = false;
   }
 
-  showRoutes() {
-    this.displayRouteTable = true
-    this.displayMap = false
-    this.display = false
-    this.directionDisplay = false
-    this.rbClick = false
+ async showRoutes() {
+    this.displayRouteTable = true;
+    this.displayMap = false;
+    this.display = false;
+    this.directionDisplay = false;
+    this.rbClick = false;
     this.displayNotAssignmentRoutesTable = false;
-    this.getAllRoute()
+    let temp:any = await this.addressService.getAllRoutesByPage(0,10).toPromise();
+    this.routeList = temp;
   }
 
   showDialog() {
@@ -162,15 +186,17 @@ export class MapComponent implements OnInit {
     this.directionDisplay = false;
   }
 
- async showNotAssignmentRoutes(){
+  async showNotAssignmentRoutes() {
     this.displayRouteTable = false;
     this.displayMap = false;
     this.display = false;
     this.directionDisplay = false;
     this.rbClick = false;
     this.displayNotAssignmentRoutesTable = true;
-    let temp: any = await this.addressService.getAllRouteByVehicleNull().toPromise()
-    this.notAssignedRouteList = temp
+    let count:any = await this.addressService.getCountRouteByVehicleIsNull().toPromise();
+    this.totalNotAssignmentRoute = count;
+    let temp: any = await this.addressService.getAllRouteByVehicleNull(0,10).toPromise();
+    this.notAssignedRouteList = temp;
   }
 
   showMap() {
@@ -181,17 +207,10 @@ export class MapComponent implements OnInit {
     this.selectedRoute = route;
     let list: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
     this.addressList = list;
-    this.displayRouteMap = true
-    this.markers = await this.mapService.drawDirection(route,this.routeMap,this.markers);
+    this.displayRouteMap = true;
+    this.markers = await this.mapService.drawDirection(route, this.routeMap, this.markers);
   }
 
-  async showRouteDetail(route: any) {
-    this.displayRouteDetail = true;
-    this.selectedRoute = route;
-    let temp: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
-    this.addressList = temp;
-
-  }
 
   async availableVehicles(route: any) {
     this.selectedRoute = route;
@@ -202,26 +221,22 @@ export class MapComponent implements OnInit {
     this.displayAvailableVehicleTable = true;
   }
 
-  async selectVehicle(vehicle:any){
+  async selectVehicle(vehicle: any) {
     console.log(vehicle)
     this.selectedRoute.vehicle = vehicle;
     console.log(this.selectedRoute)
     this.displayAvailableVehicleTable = false;
-    let newRoute:any = await this.addressService.updateRoute(this.selectedRoute).toPromise()
+    let newRoute: any = await this.addressService.updateRoute(this.selectedRoute).toPromise()
     console.log(newRoute)
-    let temp:any = await this.addressService.getAllRouteByVehicleNull().toPromise()
+    let temp: any = await this.addressService.getAllRouteByVehicleNull(0,10).toPromise()
     this.routeList = temp
-    this.messageService.add({severity: 'success', summary: 'Araç görevlendirildi!',
-      detail: newRoute.name + " adlı rota " + newRoute.vehicle.license +" plakalı "
-        +newRoute.vehicle.modelName +" modelinde araca görevlendirildi!"});
+    this.messageService.add({
+      severity: 'success', summary: 'Araç görevlendirildi!',
+      detail: newRoute.name + " adlı rota " + newRoute.vehicle.license + " plakalı "
+        + newRoute.vehicle.modelName + " modelinde araca görevlendirildi!"
+    });
   }
 
-  getAllRoute() {
-    let temp = this.addressService.getAllRoutes()
-    temp.subscribe((data: any) => {
-      this.routeList = data;
-    })
-  }
 
   calculateAddressTotal(routeId: number) {
     let total = 0;
@@ -259,7 +274,7 @@ export class MapComponent implements OnInit {
 
   public async onResponse(event: any) {
 
-    this.mapService.setDirection(this.map,event)
+    this.mapService.setDirection(this.map, event)
 
     const myRoute = event.routes[0];
     this.waypoint_order = myRoute.waypoint_order

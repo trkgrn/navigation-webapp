@@ -59,14 +59,29 @@ export class AddressService {
     return  this.http.get(this.rootURL + "getAllRoutes",{headers});
   }
 
-  getAllRouteByVehicleNull(){
+  getAllRoutesByPage(pageNo:any,pageSize:any){
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllRouteByVehicleNull",{headers});
+    return  this.http.get(this.rootURL + "getAllRoutesByPage?pageNo="+pageNo+"&pageSize="+pageSize,{headers});
+  }
+
+  getAllRouteByVehicleNull(pageNo:any,pageSize:any){
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return  this.http.get(this.rootURL + "getAllRouteByVehicleNull?pageNo="+pageNo+"&pageSize="+pageSize,{headers});
   }
 
   getAddressByRouteId(routeId:any){
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
     return  this.http.get(this.rootURL + "getAddressByRouteId?routeId="+routeId,{headers});
+  }
+
+  getRouteCount(){
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()});
+    return  this.http.get(this.rootURL + "routeCount",{headers});
+  }
+
+  getCountRouteByVehicleIsNull(){
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()});
+    return  this.http.get(this.rootURL + "countRouteByVehicleIsNull",{headers});
   }
 
 

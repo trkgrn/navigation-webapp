@@ -60,6 +60,9 @@ export class WarehouseComponent implements OnInit {
 
     let newWarehouse: any = await this.addressService.addWarehouse(this.warehouse).toPromise()
 
+    this.messageService.add({severity: 'success', summary: 'Depo Eklendi!',
+      detail: newWarehouse.name + " adlı depo başarıyla eklendi!" });
+
   }
 
 

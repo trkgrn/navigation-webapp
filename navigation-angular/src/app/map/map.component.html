@@ -42,63 +42,15 @@
         <td>
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker"
                   class="p-button-rounded p-button-help" (click)="showRouteMap(route)"></button>
-          <button pButton pRipple icon="pi pi-home" class="p-button-rounded p-button-secondary"
-                  (click)="showRouteDetail(route)"></button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
+  <p-paginator [first]="first" [rows]="10" [totalRecords]="totalAllRoute" [rowsPerPageOptions]="[10,20,30]"
+               (onPageChange)="onPageChange($event)"></p-paginator>
+
 </div>
-
-<p-dialog [(visible)]="displayRouteDetail">
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Sıra</th>
-      <th>Şehir</th>
-      <th>İlçe</th>
-      <th>Mahalle</th>
-      <th>Sokak</th>
-      <th>Bina No</th>
-      <th>Daire No</th>
-      <th style="width: 8rem"></th>
-    </tr>
-    </thead>
-
-    <tbody class="table-group-divider">
-    <tr>
-      <td>İlk Durak</td>
-      <td>{{selectedRoute?.origin.address.sehir}}</td>
-      <td>{{selectedRoute?.origin.address.mahalle}}</td>
-      <td>{{selectedRoute?.origin.address.ilce}}</td>
-      <td>{{selectedRoute?.origin.address.sokak}}</td>
-      <td>{{selectedRoute?.origin.address.binaNo}}</td>
-      <td>Depo Adı: {{selectedRoute?.origin.name}}</td>
-    </tr>
-    <tr *ngFor="let address of addressList">
-      <td>{{address.orderNo}}</td>
-      <td>{{address.sehir}}</td>
-      <td>{{address.ilce}}</td>
-      <td>{{address.mahalle}}</td>
-      <td>{{address.sokak}}</td>
-      <td>{{address.binaNo}}</td>
-      <td>{{address.daireNo}}</td>
-    </tr>
-    <tr>
-      <td>Son Durak</td>
-      <td>{{selectedRoute?.destination?.address.sehir}}</td>
-      <td>{{selectedRoute?.destination?.address.ilce}}</td>
-      <td>{{selectedRoute?.destination?.address.mahalle}}</td>
-      <td>{{selectedRoute?.destination?.address.sokak}}</td>
-      <td>{{selectedRoute?.destination?.address.binaNo}}</td>
-      <td>Depo Adı: {{selectedRoute?.destination?.name}}</td>
-    </tr>
-
-    </tbody>
-
-  </table>
-</p-dialog>
 
 
 <div *ngIf="rbClick">
@@ -150,8 +102,8 @@
     <ng-template pTemplate="body" let-route>
       <tr>
         <td>{{route.name}}</td>
-        <td>{{dateService.formatRouteDate(route.routeId, routeList, 'start')}}</td>
-        <td>{{dateService.formatRouteDate(route.routeId, routeList, 'end')}}</td>
+        <td>{{dateService.formatRouteDate(route.routeId, notAssignedRouteList, 'start')}}</td>
+        <td>{{dateService.formatRouteDate(route.routeId, notAssignedRouteList, 'end')}}</td>
         <td>{{(route.averageDistance / 1000).toFixed(2)}} km</td>
         <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
         <td>
@@ -163,12 +115,14 @@
       </tr>
     </ng-template>
   </p-table>
+  <p-paginator [first]="first2" [rows]="10" [totalRecords]="totalNotAssignmentRoute" [rowsPerPageOptions]="[10,20,30,1]"
+               (onPageChange)="onPageChange2($event)"></p-paginator>
 </div>
 
 <p-dialog [(visible)]="displayRouteMap" [modal]="true" [resizable]="false"
           [maximizable]="true" [style]="{width: '65%',height:'100%'}">
 
-  <table class="table">
+  <table class="table mb-4 mt-4">
     <thead>
     <tr>
       <th>Sıra</th>
@@ -224,35 +178,35 @@
 </p-dialog>
 
 <p-dialog [(visible)]="displayAvailableVehicleTable" [modal]="true" [resizable]="false">
-<div *ngIf="displayAvailableVehicleTable">
-  <p-table [value]="availableVehicleList" responsiveLayout="scroll" [rowHover]="true">
-    <ng-template pTemplate="caption">
-      <div class="table-header">
-        Müsait Araçlar
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Araç Adı</th>
-        <th>Araç Modeli</th>
-        <th>Araç Plakası</th>
-        <th></th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-vehicle>
-      <tr>
-        <td>{{vehicle.name}}</td>
-        <td>{{vehicle.modelName}}</td>
-        <td>{{vehicle.license}}</td>
-        <td>
-          <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-success"
-                  (click)="selectVehicle(vehicle)"></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <div *ngIf="displayAvailableVehicleTable">
+    <p-table [value]="availableVehicleList" responsiveLayout="scroll" [rowHover]="true">
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          Müsait Araçlar
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Araç Adı</th>
+          <th>Araç Modeli</th>
+          <th>Araç Plakası</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-vehicle>
+        <tr>
+          <td>{{vehicle.name}}</td>
+          <td>{{vehicle.modelName}}</td>
+          <td>{{vehicle.license}}</td>
+          <td>
+            <button pButton pRipple icon="pi pi-car" class="p-button-rounded p-button-success"
+                    (click)="selectVehicle(vehicle)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
 
-</div>
+  </div>
 
 </p-dialog>
 <!--<pre>{{routeList | json }}</pre>-->

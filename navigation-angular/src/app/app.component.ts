@@ -8,34 +8,35 @@ import {DateService} from "./services/date.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'web';
-  constructor(private primengConfig: PrimeNGConfig,private accountService:AccountService,
-              private dateService: DateService){}
+
+  constructor(private primengConfig: PrimeNGConfig, private accountService: AccountService,
+              private dateService: DateService) {
+  }
 
   ngOnInit() {
     this.primengConfig.setTranslation(this.dateService.LOCALE_TR);
   }
 
-  hasRoleManager(){
+  hasRoleManager() {
     if (this.accountService.getRole() == 'Manager')
       return true;
     return false;
   }
 
-  hasRoleDriver(){
+  hasRoleDriver() {
     if (this.accountService.getRole() == 'Driver')
       return true;
     return false;
   }
 
 
-  isLoggedIn()
-  {
+  isLoggedIn() {
     return this.accountService.isUserSignedin()
   }
-  logOut()
-  {
+
+  logOut() {
     this.accountService.signout()
   }
 }

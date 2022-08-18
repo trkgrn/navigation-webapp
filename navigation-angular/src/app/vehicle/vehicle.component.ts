@@ -34,7 +34,8 @@ export class VehicleComponent implements OnInit {
     this.vehicleAddPageClick = true;
     this.vehicleListPageClick = false;
   }
- async vehicleListPage() {
+
+  async vehicleListPage() {
     this.vehicleAddPageClick = false;
     this.vehicleListPageClick = true;
     await this.getAllRoute()
@@ -49,8 +50,10 @@ export class VehicleComponent implements OnInit {
     let newCar: any = await this.vehicleService.addVehicle(this.vehicle).toPromise()
     let vehicles: any = await this.vehicleService.getAllVehicle().toPromise()
     console.log(vehicles)
-    this.messageService.add({severity: 'success', summary: 'Araç eklendi!',
-      detail: newCar.name +" adlı "+newCar.modelName +" modelindeki " +newCar.license +" plakalı araç eklendi!"});
+    this.messageService.add({
+      severity: 'success', summary: 'Araç eklendi!',
+      detail: newCar.name + " adlı " + newCar.modelName + " modelindeki " + newCar.license + " plakalı araç eklendi!"
+    });
   }
 
 
