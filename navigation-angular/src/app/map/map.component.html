@@ -73,13 +73,11 @@
                    [destination]="destinationLatlng"
                    [waypoints]="waypoints"
                    [renderOptions]="renderOptions"
-                   (onResponse)="onResponse($event)"
-
-    >
-
+                   (onResponse)="onResponse($event)">
 
     </agm-direction>
   </agm-map>
+
 </p-dialog>
 
 <div *ngIf="displayNotAssignmentRoutesTable">
@@ -169,11 +167,13 @@
 
   </table>
 
+  <div id="directions-panel"></div>
 
   <agm-map [latitude]="40.99246515999449" [longitude]="29.4352343256"
            (mapReady)="onMapReady2($event)"
            [disableDoubleClickZoom]="true">
   </agm-map>
+
 
 </p-dialog>
 

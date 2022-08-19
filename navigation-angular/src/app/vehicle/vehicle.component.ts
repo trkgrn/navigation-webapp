@@ -16,6 +16,8 @@ declare var google: any;
   styleUrls: ['./vehicle.component.css']
 })
 export class VehicleComponent implements OnInit {
+  first=0;
+  totalVehicles:any;
   vehicleAddPageClick: boolean = true;
   vehicleListPageClick: boolean = false;
 
@@ -27,7 +29,9 @@ export class VehicleComponent implements OnInit {
               private messageService: MessageService) {
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
+   let countVehicle:any = await  this.vehicleService.countVehicle().toPromise();
+   this.totalVehicles = countVehicle;
   }
 
   vehicleAddPage() {
@@ -38,13 +42,14 @@ export class VehicleComponent implements OnInit {
   async vehicleListPage() {
     this.vehicleAddPageClick = false;
     this.vehicleListPageClick = true;
-    await this.getAllRoute()
+
+    let countVehicle:any = await  this.vehicleService.countVehicle().toPromise();
+    this.totalVehicles = countVehicle;
+    let vehicleListByPage : any = await this.vehicleService.getAllVehicleByPage(0,10).toPromise();
+    this.vehicleList = vehicleListByPage;
   }
 
-  async getAllRoute() {
-    let temp: any = await this.vehicleService.getAllVehicle().toPromise();
-    this.vehicleList = temp
-  }
+
 
   async add(form: NgForm) {
     let newCar: any = await this.vehicleService.addVehicle(this.vehicle).toPromise()
@@ -56,6 +61,12 @@ export class VehicleComponent implements OnInit {
     });
   }
 
+ async onPageChange(event:any){
+    let pageNo = event.page;
+    let pageSize = event.rows;
+    let vehicleListByPage : any = await this.vehicleService.getAllVehicleByPage(pageNo,pageSize).toPromise()
+    this.vehicleList = vehicleListByPage;
+  }
 
 }
 

@@ -35,4 +35,14 @@ export class VehicleService {
     return this.http.get(this.rootURL + "findAllNotAssignmentVehicle?startDate=" + startDate + "&endDate=" + endDate + "&typeId=" + typeId,
       {headers});
   }
+
+  getAllVehicleByPage(pageNo:any, pageSize:any){
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllVehicleByPage?pageNo="+pageNo+"&pageSize="+pageSize, {headers});
+  }
+
+  countVehicle(){
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "countVehicle", {headers});
+  }
 }

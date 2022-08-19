@@ -67,5 +67,7 @@
       </tr>
     </ng-template>
   </p-table>
+  <p-paginator [first]="first" [rows]="10" [totalRecords]="totalVehicles" [rowsPerPageOptions]="[10,20,30]"
+               (onPageChange)="onPageChange($event)"></p-paginator>
 
 </div>

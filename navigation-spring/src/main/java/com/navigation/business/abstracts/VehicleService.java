@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface VehicleService {
     List<Vehicle> findAll();
+    List<Vehicle> findAll(int pageNo,int pageSize);
     Vehicle addVehicle(Vehicle vehicle);
     List<Vehicle> findAllAvailableVehicle(Date startDate, Date endDate);
+    Long countVehicle();
 }

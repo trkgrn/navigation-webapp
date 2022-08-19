@@ -4,6 +4,8 @@ import com.navigation.business.abstracts.VehicleService;
 import com.navigation.entity.concretes.Vehicle;
 import com.navigation.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,6 +26,12 @@ public class VehicleManager implements VehicleService {
     }
 
     @Override
+    public List<Vehicle> findAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        return this.vehicleRepository.findAll(pageable).getContent();
+    }
+
+    @Override
     public Vehicle addVehicle(Vehicle vehicle) {
         Vehicle addedVehicle = this.vehicleRepository.save(vehicle);
         return addedVehicle;
@@ -32,5 +40,10 @@ public class VehicleManager implements VehicleService {
     @Override
     public List<Vehicle> findAllAvailableVehicle(Date startDate, Date endDate) {
         return this.vehicleRepository.findAllAvailableVehicle(startDate,endDate);
+    }
+
+    @Override
+    public Long countVehicle() {
+        return this.vehicleRepository.count();
     }
 }

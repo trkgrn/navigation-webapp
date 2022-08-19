@@ -38,6 +38,7 @@ export class MapService {
     }
 
     let event = parse(route.mapData)
+    console.log(event)
 
     let list: any = await this.addressService.getAddressByRouteId(route.routeId).toPromise();
     let labelIndex = 1
@@ -68,6 +69,25 @@ export class MapService {
 
     this.setMapOnAll(routeMap, markers);
     this.setDirection(routeMap,event);
+
+    const summaryPanel = document.getElementById(
+      'directions-panel'
+    ) as HTMLElement;
+
+    summaryPanel.innerHTML = '';
+    const myRoute = event.routes[0];
+
+    for (let i = 0; i < myRoute.legs.length; i++) {
+      const routeSegment = i + 1;
+
+      summaryPanel.innerHTML +=
+        '<h5>Aşama ' + routeSegment + '</h5>';
+     summaryPanel.innerHTML += myRoute.legs[i].start_address + '<br>';
+     summaryPanel.innerHTML += myRoute.legs[i].end_address + '<br>';
+     summaryPanel.innerHTML += '<b>Süre:</b> '+ myRoute.legs[i].duration!.text + '<br>';
+      summaryPanel.innerHTML += '<b>Mesafe:</b> '+ myRoute.legs[i].distance!.text + '<br><br>';
+    }
+
     return markers;
   }
 
@@ -96,6 +116,8 @@ export class MapService {
         stepPolyline.setMap(routeMap);
       });
     });
+
+
 
   }
 

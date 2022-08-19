@@ -28,6 +28,16 @@ public class VehicleController {
         return this.vehicleService.findAll();
     }
 
+    @GetMapping(value = "/getAllVehicleByPage")
+    public List<Vehicle> findAllByPage(@RequestParam int pageNo, @RequestParam int pageSize) {
+        return this.vehicleService.findAll(pageNo,pageSize);
+    }
+
+    @GetMapping(value = "/countVehicle")
+    public Long countVehicle(){
+        return this.vehicleService.countVehicle();
+    }
+
     @PostMapping(value = "/addVehicle")
     public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
         return this.vehicleService.addVehicle(vehicle);
