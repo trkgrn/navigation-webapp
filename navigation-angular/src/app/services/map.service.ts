@@ -82,8 +82,8 @@ export class MapService {
 
       summaryPanel.innerHTML +=
         '<h5>Aşama ' + routeSegment + '</h5>';
-     summaryPanel.innerHTML += myRoute.legs[i].start_address + '<br>';
-     summaryPanel.innerHTML += myRoute.legs[i].end_address + '<br>';
+     summaryPanel.innerHTML += '<b>Baş:</b> '+ myRoute.legs[i].start_address + '<br>';
+     summaryPanel.innerHTML += '<b>Son:</b> '+ myRoute.legs[i].end_address + '<br>';
      summaryPanel.innerHTML += '<b>Süre:</b> '+ myRoute.legs[i].duration!.text + '<br>';
       summaryPanel.innerHTML += '<b>Mesafe:</b> '+ myRoute.legs[i].distance!.text + '<br><br>';
     }

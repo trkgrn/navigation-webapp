@@ -35,6 +35,8 @@ import {CalendarModule} from "primeng/calendar";
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { ManageComponent } from './manage/manage.component';
 import {PaginatorModule} from "primeng/paginator";
+import { DrivertasksComponent } from './drivertasks/drivertasks.component';
+import {TabMenuModule} from "primeng/tabmenu";
 
 
 @NgModule({
@@ -49,7 +51,8 @@ import {PaginatorModule} from "primeng/paginator";
     TestComponent,
     WarehouseComponent,
     VehicleComponent,
-    ManageComponent
+    ManageComponent,
+    DrivertasksComponent
   ],
     imports: [
         BrowserModule,
@@ -77,7 +80,8 @@ import {PaginatorModule} from "primeng/paginator";
         CalendarModule,
         AgmDirectionModule,
         ReactiveFormsModule,
-        PaginatorModule
+        PaginatorModule,
+        TabMenuModule
     ],
   providers: [AccountService,LoginGuard,MessageService],
   bootstrap: [AppComponent]

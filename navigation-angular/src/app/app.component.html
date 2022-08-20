@@ -29,6 +29,12 @@
               Kullanıcıları Getir
             </a>
           </li>
+          <li *ngIf="hasRoleDriver()" class="nav-item">
+            <a class="nav-link" routerLink="/tasks">
+              <span data-feather="shopping-cart" class="align-text-bottom"></span>
+              Görevlerim
+            </a>
+          </li>
           <li *ngIf="hasRoleManager()" class="nav-item">
             <a class="nav-link" routerLink="/route">
               <span data-feather="shopping-cart" class="align-text-bottom"></span>

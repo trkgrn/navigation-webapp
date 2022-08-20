@@ -10,6 +10,7 @@ import {TestComponent} from "./test/test.component";
 import {WarehouseComponent} from "./warehouse/warehouse.component";
 import {VehicleComponent} from "./vehicle/vehicle.component";
 import {ManageComponent} from "./manage/manage.component";
+import {DrivertasksComponent} from "./drivertasks/drivertasks.component";
 
 const routes: Routes = [
   {path:"home",component:HomeComponent,canActivate:[LoginGuard],data:{roles:['Manager','Driver']}},
@@ -21,7 +22,8 @@ const routes: Routes = [
   {path:"test",component:TestComponent,canActivate:[LoginGuard],data:{roles:['Manager','Driver']}},
   {path:"warehouse",component:WarehouseComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
   {path:"vehicle",component:VehicleComponent,canActivate:[LoginGuard],data:{roles:['Manager']}},
-  {path:"manage",component:ManageComponent,canActivate:[LoginGuard],data:{roles: ['Manager']}}
+  {path:"manage",component:ManageComponent,canActivate:[LoginGuard],data:{roles: ['Manager']}},
+  {path:"tasks",component:DrivertasksComponent,canActivate:[LoginGuard],data:{roles: ['Driver']}}
 ];
 
 @NgModule({

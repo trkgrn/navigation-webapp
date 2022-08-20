@@ -24,10 +24,16 @@
 
 <div *ngIf="displayRouteTable">
   <p-table [value]="routeList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Tüm Rotalar
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th>Rota Adı</th>
-        <th>Tarih</th>
+        <th>Başlangıç Tarihi</th>
+        <th>Bitiş Tarihi</th>
         <th>Toplam Mesafe</th>
         <th>Ortalama Süre</th>
         <th></th>
@@ -37,6 +43,7 @@
       <tr>
         <td>{{route.name}}</td>
         <td>{{dateService.formatRouteDate(route.routeId, routeList, 'start')}}</td>
+        <td>{{dateService.formatRouteDate(route.routeId, routeList, 'end')}}</td>
         <td>{{(route.averageDistance / 1000).toFixed(2)}} km</td>
         <td>{{dateService.secondsToDayHourMinute(route.averageDuration)}}</td>
         <td>
