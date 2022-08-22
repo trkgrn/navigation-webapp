@@ -64,5 +64,15 @@ public class RouteController {
         return this.routeService.updateRoute(route);
     }
 
+    @GetMapping(value = "/findTasksByUserId")
+    public List<RouteDto> findTasksByUserId(@RequestParam Long userId, @RequestParam int pageNo, @RequestParam int pageSize) {
+        return this.routeService.findTasksByUserId(userId,pageNo,pageSize);
+    }
+
+    @GetMapping(value = "/countTasksByUserId")
+    Long countTasksByUserId(@RequestParam Long userId){
+        return this.routeService.countTasksByUserId(userId);
+    }
+
 
 }

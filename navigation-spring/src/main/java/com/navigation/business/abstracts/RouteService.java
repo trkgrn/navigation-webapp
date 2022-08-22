@@ -16,5 +16,7 @@ public interface RouteService {
     Route updateRoute(Route route);
     Long routeCount();
     Long countRouteByVehicleIsNull();
+    List<RouteDto> findTasksByUserId(Long userId,int pageNo, int pageSize);
+    Long countTasksByUserId(Long userId);
 
 }

@@ -33,6 +33,8 @@ public class CustomUserDetails implements UserDetails {
 
     public Role getRole(){return user.getRole();}
 
+    public Long getId(){return  user.getId();}
+
     @Override
     public String getUsername() {
         return user.getUsername();

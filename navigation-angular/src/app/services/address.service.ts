@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AddressComponent, Adres, Route} from "../address/address.component";
 import {AccountService} from "./account.service";
@@ -12,93 +12,108 @@ import {environment} from "../../environments/environment";
 export class AddressService {
 
   rootURL: string = environment.rootUrl
-  constructor(private http:HttpClient,private accountService:AccountService) { }
 
-  addCoordinate(obj:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return this.http.post<Coordinate>(this.rootURL + "addCoordinate",obj,{headers})
+  constructor(private http: HttpClient, private accountService: AccountService) {
   }
 
-  addRoute(routeData:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-   // console.log(routeData)
+  addCoordinate(obj: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.post<Coordinate>(this.rootURL + "addCoordinate", obj, {headers})
+  }
+
+  addRoute(routeData: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    // console.log(routeData)
     let route = {
       name: routeData.name,
-      startDate : routeData.startDate,
+      startDate: routeData.startDate,
       endDate: routeData.endDate,
-      averageDistance:routeData.averageDistance,
-      averageDuration:routeData.averageDuration,
-      mapData:routeData.mapData,
-      origin:{
+      averageDistance: routeData.averageDistance,
+      averageDuration: routeData.averageDuration,
+      mapData: routeData.mapData,
+      origin: {
         warehouseId: routeData.originId
       },
-      destination:{
+      destination: {
         warehouseId: routeData.destinationId
       }
     }
-    return this.http.post<Route>(this.rootURL + "addRoute",route, {headers});
+    return this.http.post<Route>(this.rootURL + "addRoute", route, {headers});
   }
 
-  addAddressList(addressList:Adres[]){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return this.http.post<Adres[]>( this.rootURL + "addAddressList",addressList,{headers});
+  addAddressList(addressList: Adres[]) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.post<Adres[]>(this.rootURL + "addAddressList", addressList, {headers});
   }
 
-  addAddress(address:Adres){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return this.http.post<Adres>( this.rootURL + "addAddress",address,{headers});
+  addAddress(address: Adres) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.post<Adres>(this.rootURL + "addAddress", address, {headers});
   }
 
-  addWarehouse(warehouse:Warehouse){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return this.http.post<Warehouse>( this.rootURL + "addWarehouse",warehouse,{headers});
+  addWarehouse(warehouse: Warehouse) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.post<Warehouse>(this.rootURL + "addWarehouse", warehouse, {headers});
   }
 
-  getAllRoutes(){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllRoutes",{headers});
+  getAllRoutes() {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllRoutes", {headers});
   }
 
-  getAllRoutesByPage(pageNo:any,pageSize:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllRoutesByPage?pageNo="+pageNo+"&pageSize="+pageSize,{headers});
+  getAllRoutesByPage(pageNo: any, pageSize: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllRoutesByPage?pageNo=" + pageNo + "&pageSize=" + pageSize, {headers});
   }
 
-  getAllRouteByVehicleNull(pageNo:any,pageSize:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllRouteByVehicleNull?pageNo="+pageNo+"&pageSize="+pageSize,{headers});
+  getAllRouteByVehicleNull(pageNo: any, pageSize: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllRouteByVehicleNull?pageNo=" + pageNo + "&pageSize=" + pageSize, {headers});
   }
 
-  getAddressByRouteId(routeId:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAddressByRouteId?routeId="+routeId,{headers});
+  getAddressByRouteId(routeId: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAddressByRouteId?routeId=" + routeId, {headers});
   }
 
-  getRouteCount(){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()});
-    return  this.http.get(this.rootURL + "routeCount",{headers});
+  getRouteCount() {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()});
+    return this.http.get(this.rootURL + "routeCount", {headers});
   }
 
-  getCountRouteByVehicleIsNull(){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()});
-    return  this.http.get(this.rootURL + "countRouteByVehicleIsNull",{headers});
+  getCountRouteByVehicleIsNull() {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()});
+    return this.http.get(this.rootURL + "countRouteByVehicleIsNull", {headers});
   }
 
 
-  getAllWarehouse(){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getAllWarehouse",{headers});
+  getAllWarehouse() {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getAllWarehouse", {headers});
   }
 
-  getMapDataByRouteId(routeId:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.get(this.rootURL + "getMapDataByRouteId?routeId="+routeId,{headers});
+  getMapDataByRouteId(routeId: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "getMapDataByRouteId?routeId=" + routeId, {headers});
   }
 
-  updateRoute(route:any){
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
-    return  this.http.put(this.rootURL + "updateRoute",route,{headers});
+  updateRoute(route: any) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.put(this.rootURL + "updateRoute", route, {headers});
   }
 
+  findTasksByUserId(pageNo: any, pageSize: any) {
+    let userId = this.accountService.getUserId();
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "findTasksByUserId?userId=" + userId + "&pageNo=" + pageNo +
+      "&pageSize=" + pageSize, {headers});
+  }
+
+  countTasksByUserId(){
+    let userId = this.accountService.getUserId();
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get(this.rootURL + "countTasksByUserId?userId=" + userId, {headers});
+
+  }
 
 }

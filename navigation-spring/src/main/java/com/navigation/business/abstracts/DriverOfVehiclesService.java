@@ -12,4 +12,5 @@ public interface DriverOfVehiclesService {
    List<Driver> findAllAvailableDriver(Date startDate, Date endDate);
    DriversOfVehicles add(DriversOfVehicles driversOfVehicles);
    List<Vehicle> findAllNotAssignmentVehicle(Date startDate, Date endDate,Long typeId);
+   List<DriversOfVehicles> findDriversOfVehiclesByDriver_User_IdOrderByStartDate(Long userId);
 }

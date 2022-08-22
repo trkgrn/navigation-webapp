@@ -9,4 +9,5 @@ import lombok.Data;
 public class Response {
     private String token;
     private Role role;
+    private Long id;
 }

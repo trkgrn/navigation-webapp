@@ -2,7 +2,6 @@ package com.navigation.repository;
 
 import com.navigation.entity.concretes.Driver;
 import com.navigation.entity.concretes.DriversOfVehicles;
-import com.navigation.entity.concretes.DriversOfVehiclesId;
 import com.navigation.entity.concretes.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,6 +34,8 @@ public interface DriverOfVehiclesRepository extends JpaRepository<DriversOfVehic
             "AND ( (dv.startDate BETWEEN :startDate AND :endDate) " +
             "OR (dv.endDate BETWEEN :startDate AND :endDate)) )")
     List<Vehicle> findAllNotAssignmentVehicle(Date startDate, Date endDate, Long typeId);
+
+    List<DriversOfVehicles> findDriversOfVehiclesByDriver_User_IdOrderByStartDate(Long userId);
 
     @Transactional
     @Modifying(clearAutomatically = true)

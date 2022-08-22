@@ -72,4 +72,15 @@ public class RouteManager implements RouteService {
     public Long countRouteByVehicleIsNull() {
         return this.routeRepository.countRouteByVehicleIsNull();
     }
+
+    @Override
+    public List<RouteDto> findTasksByUserId(Long userId, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        return this.routeRepository.findTasksByUserId(userId,pageable);
+    }
+
+    @Override
+    public Long countTasksByUserId(Long userId) {
+        return this.routeRepository.countTasksByUserId(userId);
+    }
 }

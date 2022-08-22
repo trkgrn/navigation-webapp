@@ -1,2 +1,133 @@
 <p-toast [style]="{marginTop: '80px'}"></p-toast>
   <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
+
+<div *ngIf="displayVehicleListPage">
+
+  <p-table [value]="vehicleList" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Görevli Olduğum Araçlar
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Araç Adı</th>
+        <th>Araç Modeli</th>
+        <th>Araç Plakası</th>
+        <th>Başlangıç</th>
+        <th>Bitiş</th>
+        <th>Rol</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-next>
+      <tr>
+        <td>{{next.vehicle.name}}</td>
+        <td>{{next.vehicle.modelName}}</td>
+        <td>{{next.vehicle.license}}</td>
+        <td>{{dateService.dateFormatDriverOfVehicles(next.startDate)}}</td>
+        <td>{{dateService.dateFormatDriverOfVehicles(next.endDate)}}</td>
+        <td>{{next.type.name}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+
+</div>
+
+
+<div *ngIf="displayRouteListPage">
+  <p-table [value]="routeList" styleClass="p-datatable-lg" responsiveLayout="scroll" [rowHover]="true">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        Görevli Olduğum Rotalar
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Rota Adı</th>
+        <th>Başlangıç</th>
+        <th>Bitiş</th>
+        <th>Toplam Mesafe</th>
+        <th>Ortalama Süre</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-next>
+      <tr>
+        <td>{{next.name}}</td>
+        <td>{{dateService.formatRouteDate(next.routeId,routeList,'start')}}</td>
+        <td>{{dateService.formatRouteDate(next.routeId,routeList,'end')}}</td>
+        <td>{{(next.averageDistance / 1000).toFixed(2)}} km</td>
+        <td>{{dateService.secondsToDayHourMinute(next.averageDuration)}}</td>
+        <td>
+          <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker"
+                  class="p-button-rounded p-button-help" (click)="showRouteMap(next)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator [first]="first" [rows]="10" [totalRecords]="totalRoutes" [rowsPerPageOptions]="[10,20,30,1]"
+               (onPageChange)="onPageChange($event)"></p-paginator>
+</div>
+
+
+<p-dialog [(visible)]="displayRouteMap" [modal]="true" [resizable]="false"
+          [maximizable]="true" [style]="{width: '65%',height:'100%'}">
+
+  <table class="table mb-4 mt-4">
+    <thead>
+    <tr>
+      <th>Sıra</th>
+      <th>Şehir</th>
+      <th>İlçe</th>
+      <th>Mahalle</th>
+      <th>Sokak</th>
+      <th>Bina No</th>
+      <th>Daire No</th>
+      <th style="width: 8rem"></th>
+    </tr>
+    </thead>
+
+    <tbody class="table-group-divider">
+    <tr>
+      <td>İlk Durak</td>
+      <td>{{selectedRoute?.origin.address.sehir}}</td>
+      <td>{{selectedRoute?.origin.address.mahalle}}</td>
+      <td>{{selectedRoute?.origin.address.ilce}}</td>
+      <td>{{selectedRoute?.origin.address.sokak}}</td>
+      <td>{{selectedRoute?.origin.address.binaNo}}</td>
+      <td>Depo Adı: {{selectedRoute?.origin.name}}</td>
+    </tr>
+    <tr *ngFor="let address of addressList">
+      <td>{{address.orderNo}}</td>
+      <td>{{address.sehir}}</td>
+      <td>{{address.ilce}}</td>
+      <td>{{address.mahalle}}</td>
+      <td>{{address.sokak}}</td>
+      <td>{{address.binaNo}}</td>
+      <td>{{address.daireNo}}</td>
+    </tr>
+    <tr>
+      <td>Son Durak</td>
+      <td>{{selectedRoute?.destination?.address.sehir}}</td>
+      <td>{{selectedRoute?.destination?.address.ilce}}</td>
+      <td>{{selectedRoute?.destination?.address.mahalle}}</td>
+      <td>{{selectedRoute?.destination?.address.sokak}}</td>
+      <td>{{selectedRoute?.destination?.address.binaNo}}</td>
+      <td>Depo Adı: {{selectedRoute?.destination?.name}}</td>
+    </tr>
+
+    </tbody>
+
+  </table>
+
+  <div id="directions-panel"></div>
+
+  <agm-map [latitude]="40.99246515999449" [longitude]="29.4352343256"
+           (mapReady)="onMapReady($event)"
+           [disableDoubleClickZoom]="true">
+  </agm-map>
+
+
+</p-dialog>

@@ -49,4 +49,13 @@ public class DriverOfVehiclesController {
         this.driverOfVehiclesService.add(driversOfVehicles);
         return driversOfVehicles;
     }
+
+    @GetMapping(value = "/findDriversOfVehiclesByUserId")
+   public List<DriversOfVehicles> findDriversOfVehiclesByDriver_User_IdOrderByStartDate(@RequestParam Long userId){
+        List<DriversOfVehicles> response = this.driverOfVehiclesService.findDriversOfVehiclesByDriver_User_IdOrderByStartDate(userId);
+        for (DriversOfVehicles next:response) {
+            next.getDriver().getUser().setPassword("");
+        }
+        return response;
+    }
 }

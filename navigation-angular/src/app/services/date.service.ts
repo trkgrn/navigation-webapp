@@ -89,4 +89,10 @@ export class DateService {
       date.getMinutes();
     return formattedDate;
   }
+
+  dateFormatDriverOfVehicles(date:any){
+    let newDate = new Date(date);
+    let formattedDate = this.dateFormatForHTML(newDate);
+    return formattedDate;
+  }
 }

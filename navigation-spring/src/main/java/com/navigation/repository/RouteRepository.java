@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RouteRepository extends JpaRepository<Route,Long> {
+public interface RouteRepository extends JpaRepository<Route, Long> {
 
     @Query("select  new com.navigation.entity.dtos.RouteDto" +
-    "(r.routeId,r.name,r.startDate,r.endDate,r.averageDistance,r.averageDuration,r.origin,r.destination)" +
-    " FROM Route r" +
-    " where r.vehicle.vehicleId=:vehicleId")
+            "(r.routeId,r.name,r.startDate,r.endDate,r.averageDistance,r.averageDuration,r.origin,r.destination)" +
+            " FROM Route r" +
+            " where r.vehicle.vehicleId=:vehicleId")
     List<RouteDto> findRoutesByVehicleId(Long vehicleId); // Id'si verilen araca bağlı rotalar
 
     @Query("select  new com.navigation.entity.dtos.RouteDto" +
@@ -40,12 +40,37 @@ public interface RouteRepository extends JpaRepository<Route,Long> {
             " FROM Route r order by r.routeId")
     List<RouteDto> findAllRoutes(Pageable pageable);
 
+
+    @Query("SELECT new com.navigation.entity.dtos.RouteDto" +
+            "(r.routeId,r.name,r.startDate,r.endDate,r.averageDistance," +
+            "r.averageDuration,r.origin,r.destination,r.vehicle.vehicleId)" +
+            "FROM DriversOfVehicles dv," + " Driver d, " + " Vehicle v, " + " Route  r, " + " DriverType dt" +
+            " WHERE dv.driver.driverId = d.driverId " +
+            " AND dv.type.typeId = dt.typeId " +
+            " AND dv.vehicle.vehicleId = v.vehicleId " +
+            " AND r.vehicle.vehicleId = v.vehicleId " +
+            " AND d.user.id =:#{#userId}" +
+            " AND ((r.startDate BETWEEN dv.startDate AND dv.endDate)" +
+            " OR (r.endDate BETWEEN dv.startDate AND dv.endDate))" +
+            " ORDER BY r.startDate")
+    List<RouteDto> findTasksByUserId(Long userId,Pageable pageable);
+
+    @Query("SELECT count(r.routeId) "+
+            " FROM DriversOfVehicles dv," + " Driver d, " + " Vehicle v, " + " Route  r, " + " DriverType dt" +
+            " WHERE dv.driver.driverId = d.driverId " +
+            " AND dv.type.typeId = dt.typeId " +
+            " AND dv.vehicle.vehicleId = v.vehicleId " +
+            " AND r.vehicle.vehicleId = v.vehicleId " +
+            " AND d.user.id =:#{#userId}" +
+            " AND ((r.startDate BETWEEN dv.startDate AND dv.endDate)" +
+            " OR (r.endDate BETWEEN dv.startDate AND dv.endDate))")
+    Long countTasksByUserId(Long userId);
+
+
     @Query("select new com.navigation.entity.dtos.MapDataDto(r.mapData)" +
             " FROM Route r " +
             "where r.routeId=:routeId")
     MapDataDto getMapDataByRouteId(Long routeId);
-
-
 
 
 }

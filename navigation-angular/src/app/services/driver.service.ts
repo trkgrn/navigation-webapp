@@ -27,4 +27,10 @@ export class DriverService {
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
     return this.http.post<any>( this.rootURL + "addDriverOfVehicle",driverOfVehicle,{headers});
   }
+
+  findDriversOfVehiclesByUserId(){
+    let id = this.accountService.getUserId()
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.accountService.getToken()})
+    return this.http.get( this.rootURL + "findDriversOfVehiclesByUserId?userId="+id,{headers});
+  }
 }

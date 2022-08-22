@@ -40,4 +40,9 @@ public class DriverOfVehiclesManager implements DriverOfVehiclesService {
     public List<Vehicle> findAllNotAssignmentVehicle(Date startDate, Date endDate,Long typeId) {
         return this.driverOfVehiclesRepository.findAllNotAssignmentVehicle(startDate,endDate,typeId);
     }
+
+    @Override
+    public List<DriversOfVehicles> findDriversOfVehiclesByDriver_User_IdOrderByStartDate(Long userId) {
+        return this.driverOfVehiclesRepository.findDriversOfVehiclesByDriver_User_IdOrderByStartDate(userId);
+    }
 }
