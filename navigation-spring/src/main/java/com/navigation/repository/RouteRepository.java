@@ -43,7 +43,7 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
 
     @Query("SELECT new com.navigation.entity.dtos.RouteDto" +
             "(r.routeId,r.name,r.startDate,r.endDate,r.averageDistance," +
-            "r.averageDuration,r.origin,r.destination,r.vehicle.vehicleId)" +
+            "r.averageDuration,r.origin,r.destination,r.vehicle.vehicleId,r.vehicle,dv.type)" +
             "FROM DriversOfVehicles dv," + " Driver d, " + " Vehicle v, " + " Route  r, " + " DriverType dt" +
             " WHERE dv.driver.driverId = d.driverId " +
             " AND dv.type.typeId = dt.typeId " +

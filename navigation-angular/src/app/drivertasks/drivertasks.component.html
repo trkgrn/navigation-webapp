@@ -3,7 +3,7 @@
 
 <div *ngIf="displayVehicleListPage">
 
-  <p-table [value]="vehicleList" responsiveLayout="scroll" [rowHover]="true">
+  <p-table [value]="vehicleList" styleClass="p-datatable-lg" responsiveLayout="scroll" [rowHover]="true">
     <ng-template pTemplate="caption">
       <div class="table-header">
         Görevli Olduğum Araçlar
@@ -50,6 +50,10 @@
         <th>Bitiş</th>
         <th>Toplam Mesafe</th>
         <th>Ortalama Süre</th>
+        <th>Araç Adı</th>
+        <th>Araç Modeli</th>
+        <th>Araç Plakası</th>
+        <th>Rolüm</th>
         <th></th>
       </tr>
     </ng-template>
@@ -60,6 +64,10 @@
         <td>{{dateService.formatRouteDate(next.routeId,routeList,'end')}}</td>
         <td>{{(next.averageDistance / 1000).toFixed(2)}} km</td>
         <td>{{dateService.secondsToDayHourMinute(next.averageDuration)}}</td>
+        <td>{{next.vehicle.name}}</td>
+        <td>{{next.vehicle.modelName}}</td>
+        <td>{{next.vehicle.license}}</td>
+        <td>{{next.driverType.name}}</td>
         <td>
           <button style="margin-right: 1mm" pButton pRipple icon="pi pi-map-marker"
                   class="p-button-rounded p-button-help" (click)="showRouteMap(next)"></button>

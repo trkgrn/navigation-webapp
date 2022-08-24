@@ -229,7 +229,7 @@ export class MapComponent implements OnInit {
     let newRoute: any = await this.addressService.updateRoute(this.selectedRoute).toPromise()
     console.log(newRoute)
     let temp: any = await this.addressService.getAllRouteByVehicleNull(0,10).toPromise()
-    this.routeList = temp
+    this.notAssignedRouteList = temp
     this.messageService.add({
       severity: 'success', summary: 'Araç görevlendirildi!',
       detail: newRoute.name + " adlı rota " + newRoute.vehicle.license + " plakalı "
